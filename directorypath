@@ -1,0 +1,30 @@
+public  void doit() 
+		    	{
+		    	   try 
+		    		{
+		    		 
+					in = new BufferedReader(new FileReader(inputpath));
+				 
+					 String dirpath=inputpath.toString().substring(0,inputpath.toString().lastIndexOf("\\"));
+					  
+//					    System.out.println("dir-path..."+dirpath);
+					     xmldirpath=dirpath.concat("\\tx1.xml");
+//					    out = new StreamResult(new FileWriter("xmldirpath"));
+//					    System.out.println("xml-dir-path..."+xmldirpath);
+					  
+					    String logdirpath=dirpath.concat("\\Log.txt");
+					    File logFile=new File(logdirpath);
+//					    System.out.println("log-dir-path..."+logdirpath);
+					
+//					    new File("logdirpath");
+		     		 	fos=new FileOutputStream(logFile);
+//		     		 	 System.exit(0);
+						 
+		     		  
+						if(!logFile.exists())
+			        	{
+			        		logFile.createNewFile();
+			        	}
+					  
+					
+//		            
