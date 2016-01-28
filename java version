@@ -1,0 +1,32 @@
+package New;
+
+import java.io.IOException;
+
+public class Initlisation {
+
+		 public static void checkjavaVersion(float developedVersion) throws IOException	{
+				//checking the java version
+			   float version=Float.parseFloat(System.getProperty("java.specification.version"));
+//			   System.out.println("java version is :"+version);
+			   
+				   			  
+			      if(version>=developedVersion)
+			       {
+//				   System.out.println("this sytem supports java version ");
+			       }
+			      else 
+			      {
+//			       System.out.println("Application developed version is "+developedVersion);	  
+//				   System.out.println("java version "+version+" doesn't support lower version");
+				 
+				   //log 4j writting error msg to file
+				   
+				   String err1="Error[2]: Application developed version is "+developedVersion+"\n";
+				   err1+="java version "+version+" doesn't support lower version";
+		    	
+				   byte b[]=err1.getBytes();
+		    		System.out.println(err1);
+		    		Code.fos.write(b);
+		    		System.exit(2);
+				  
+				 
