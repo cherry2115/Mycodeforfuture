@@ -1,0 +1,837 @@
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+$(document).ready(function(){
+    $('#purpose').on('change', function() {
+      if ( this.value == '1')
+      //.....................^.......
+      {
+        $("#parsed").hide();
+		$("#addressid").hide();
+		$("#officeid").hide();
+		$("#domestic").hide();
+		$("#latitude").hide();
+		$("#singlelineentry").hide();
+		$("#batchfile").hide();
+		$("#validation1").hide();
+        $("#unparsed").show();
+		$("#validation").show();
+      }
+      else  if ( this.value == '2')
+      {
+        $("#parsed").show();
+		$("#addressid").hide();
+		$("#officeid").hide();
+		$("#domestic").hide();
+		$("#latitude").hide();
+		$("#singlelineentry").hide();
+		$("#batchfile").hide();
+        $("#unparsed").hide();
+      }
+	  else  if ( this.value == '3')
+      {
+        $("#parsed").hide();
+		$("#addressid").show();
+		$("#officeid").hide();
+		$("#domestic").hide();
+		$("#latitude").hide();
+		$("#singlelineentry").hide();
+		$("#batchfile").hide();
+        $("#unparsed").hide();
+		$("#validation1").show();
+		$("#validation").hide();
+      }
+	  else  if ( this.value == '4')
+      {
+        $("#parsed").hide();
+		$("#addressid").hide();
+		$("#officeid").show();
+		$("#domestic").hide();
+		$("#latitude").hide();
+		$("#singlelineentry").hide();
+		$("#batchfile").hide();
+        $("#unparsed").hide();
+      }
+	  else  if ( this.value == '5')
+      {
+        $("#parsed").hide();
+		$("#addressid").hide();
+		$("#officeid").hide();
+		$("#domestic").show();
+		$("#latitude").hide();
+		$("#singlelineentry").hide();
+		$("#batchfile").hide();
+        $("#unparsed").hide();
+      }
+	  else  if ( this.value == '6')
+      {
+        $("#parsed").hide();
+		$("#addressid").hide();
+		$("#officeid").hide();
+		$("#domestic").hide();
+		$("#latitude").show();
+		$("#singlelineentry").hide();
+		$("#batchfile").hide();
+        $("#unparsed").hide();
+      }
+	  else  if ( this.value == '7')
+      {
+        $("#parsed").hide();
+		$("#addressid").hide();
+		$("#officeid").hide();
+		$("#domestic").hide();
+		$("#latitude").hide();
+		$("#singlelineentry").show();
+		$("#batchfile").hide();
+        $("#unparsed").hide();
+      }
+	  else  if ( this.value == '8')
+      {
+        $("#parsed").hide();
+		$("#addressid").hide();
+		$("#officeid").hide();
+		$("#domestic").hide();
+		$("#latitude").hide();
+		$("#singlelineentry").hide();
+		$("#batchfile").show();
+        $("#unparsed").hide();
+		$("#validation1").hide();
+		$("#validation").hide();
+      }
+       else  
+      {
+        $("#parsed").hide();
+		$("#addressid").hide();
+		$("#officeid").hide();
+		$("#domestic").hide();
+		$("#latitude").hide();
+		$("#singlelineentry").hide();
+		$("#batchfile").hide();
+        $("#unparsed").hide();
+		$("#validation1").hide();
+		$("#validation").hide();
+      }
+    });
+});
+</script>
+<body>
+<fieldset style="width:100px;">
+<legend>Input Address</legend>
+
+<tr>
+<td>Input Format :&nbsp</td>
+<td>
+<select id='purpose' style="width: 200px;">
+<option value="0">Select</option>
+<option value="1">Service Address (Unparsed)</option>
+<option value="2">Service Address (Parsed)</option>
+<option value="3">Address Id</option>
+<option value="4">Office Id</option>
+<option value="5">Domestic rural Address</option>
+<option value="6">Latitude / longitude</option>
+<option value="7">Single line Entry</option>
+<option value="8">Batch File</option>
+</select>
+</td>
+</tr>
+
+
+<div style='display:none;' id='unparsed'>
+<table>
+ <tr>
+<td> Country:</td>
+<td><select name="City" style="width: 150px;">
+<option size="30" value="-1" selected></option>
+</select></td>
+</tr>
+
+
+<tr>
+<td> Address Line 1 &nbsp   : </td>
+<td><input type="text" name="paddress" id="paddress" size="20"></td>
+</tr>
+<tr>
+<td>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp City   :</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+ <tr>
+<td> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp State :</td>
+<td><select name="City" style="width: 200px;">
+<option value="-1" selected></option>
+</select></td>
+<td>Zip:</td>
+<td><input type="text" name="paddress" id="paddress" size="10"></td>
+</tr>
+<tr>
+<td>Sub Location:</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td> LD1</td>
+<td><select name="City" style="width: 40px;">
+<option size="30" value="-1" selected></option>
+</select></td>
+
+
+<td>LV1:</td>
+<td><input type="text" name="paddress" id="paddress" size="5"></td>
+
+<td> LD2</td>
+<td><select name="City" style="width: 40px;">
+<option size="30" value="-1" selected></option>
+</select></td>
+
+<td>LV2:</td>
+<td><input type="text" name="paddress" id="paddress" size="5"></td>
+
+<td> LD3</td>
+<td><select name="City" style="width: 40px;">
+<option size="30" value="-1" selected></option>
+</select></td>
+
+<td>LV3:</td>
+<td><input type="text" name="paddress" id="paddress" size="5"></td>
+</tr>
+</table>
+</div>
+
+<!-- Write your parsed div fields below -->
+<div style='display:none;' id='parsed'>
+<table>
+<tr>
+<td>&nbsp &nbsp &nbsp Country  :</td>
+<td><select name="City" style="width: 200px;">
+<option size="30" value="-1" selected></option>
+</select></td>
+</tr>
+
+<tr>
+<td>AddressLine 1:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>City:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+ <tr>
+<td>State:</td>
+<td><select name="City" style="width: 200px;">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>Zip:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>Sub Location:</td>
+</tr>
+</table>
+<table>
+<tr>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD3</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+</tr>
+</table>
+</div>
+<!-- Write your addressid div fields below -->
+<div style='display:none;' id='addressid'>
+<table>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option size="30" value="-1" selected>select..</option>
+</select></td>
+</tr>
+<br/>
+
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>Zip:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>Sub Location:</td>
+</tr>
+</table>
+<table>
+<tr>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD3</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+</tr>
+</table>
+</div>
+<!-- Write your officeid div fields below -->
+<div style='display:none;' id='officeid'>
+<table>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option size="30" value="-1" selected>select..</option>
+</select></td>
+</tr>
+<br/>
+
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>Zip:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>Sub Location:</td>
+</tr>
+</table>
+<table>
+<tr>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD3</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+</tr>
+</table>
+</div>
+<!-- Write your domestic div fields below -->
+<div style='display:none;' id='domestic'>
+<table>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option size="30" value="-1" selected>select..</option>
+</select></td>
+</tr>
+<br/>
+
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>Zip:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>Sub Location:</td>
+</tr>
+</table>
+<table>
+<tr>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD3</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+</tr>
+</table>
+</div>
+<!-- Write your latitude div fields below -->
+<div style='display:none;' id='latitude'>
+<table>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option size="30" value="-1" selected>select..</option>
+</select></td>
+</tr>
+<br/>
+
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>Zip:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>Sub Location:</td>
+</tr>
+</table>
+<table>
+<tr>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD3</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+</tr>
+</table>
+</div>
+<!-- Write your singlelineentry div fields below -->
+<div style='display:none;' id='singlelineentry'>
+<table>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option size="30" value="-1" selected>select..</option>
+</select></td>
+</tr>
+<br/>
+
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>Zip:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>Sub Location:</td>
+</tr>
+</table>
+<table>
+<tr>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD3</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+</tr>
+</table>
+</div>
+<!-- Write your batchfile div fields below -->
+<div style='display:none;' id='batchfile'>
+<table>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option size="30" value="-1" selected>select..</option>
+</select></td>
+</tr>
+<br/>
+
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>test:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+ <tr>
+<td>test:</td>
+<td><select name="City" style="width: 200px;">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>Zip:</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>Sub Location:</td>
+</tr>
+</table>
+<table>
+<tr>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD3</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+</tr>
+</table>
+</div>
+</fieldset>
+
+
+
+
+<div style='display:none;' id='validation'>
+<fieldset style="width:630px;">
+<legend>Address Validation Option</legend>
+<table>
+<tr>
+<td><input type="checkbox" name="vehicle" value="Bike">Perform LEC Validation <td><br>
+</tr>
+<tr>
+<td><input type="checkbox" name="vehicle" value="Bike">Return All Office Locations <td><br>
+</tr>
+<tr>
+<td><input type="checkbox" name="vehicle" value="Bike">Lookup Building CLLI/NSC Code(s)<td>
+</tr>
+</table>
+</fieldset>
+</div>
+
+<div style='display:none;' id='validation1'>
+<fieldset style="width:630px;">
+<legend>Address Validation Option</legend>
+<table>
+<tr>
+<td><input type="checkbox" name="vehicle" value="Bike">Perform LEC Validation <td><br>
+</tr>
+<tr>
+<td><input type="checkbox" name="vehicle" value="Bike">Return All Office Locations <td><br>
+</tr>
+<tr>
+<td><input type="checkbox" name="vehicle" value="Bike">Lookup Building CLLI/NSC Code(s)<td>
+</tr>
+<tr>
+<td><input type="checkbox" name="vehicle" value="Bike">Check for Nearby LIT/OLO Site within <td>
+<td><select name="City">
+<option value="500" selected>500</option>
+</select>:Meters</td>
+</tr>
+</table>
+</fieldset>
+</div>
+<button type="button" onclick="alert('Hello world!')">Submit</button>
+<button type="button" onclick="alert('Hello world!')">Clear</button>
+
+
+
+
+
+
+
+<div style='display:none;' id='parsed'>
+<tr>
+<td>Addreess Id : </td>
+
+</tr>
+    <input type='Address Id' class='Address Id' name='business' value="" size='20' /><br/><br/>
+	
+	<tr>
+<td>Sub Location :</td>
+
+</tr>
+	
+<tr>
+<td>LD1</td>
+<td><select name="City">
+<option value="" selected>select..</option>
+</select></td>
+
+<td>LV1</td>
+<input type='Address Id' class='Address Id' name='business' value="" size='2' />
+</select></td>
+
+<td>LD2</td>
+<td><select name="City">
+<option value="500" selected>select..</option>
+</select></td>
+
+<td>LV2</td>
+<input type='Address Id' class='Address Id' name='business' value="" size='2' />
+</select></td>
+
+<td>LD3</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+
+</tr><td>LV3</td>
+<input type='Address Id' class='Address Id' name='business' value="" size='2' />
+</select></td>
+</tr>
+	</div>
+	
+
+	
+<div style='display:none;' id='business_new'>
+<tr>
+<td>Office Id : </td>
+</div>
+
+
+
+<div style='display:none;' id='business'><br/>&nbsp;
+<br/>&nbsp;
+<table >
+ <tr>
+<td>RR/HC Type</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>Route :</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+<td>Box :</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<br/>
+
+<tr>
+<td>Address Line 1</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>City</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+ <tr>
+ 
+ 
+<td>State</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>Zip</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+
+
+
+<tr>
+<td>Sub Location</td>
+</tr>
+<tr>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV1</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LV2</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+<td>LD3</td>
+<td><select name="City">
+<option value="-1" selected>select..</option>
+</select></td>
+</tr>
+</table>
+</div>
+
+
+
+<div style='display:none;' id='business'><br/>&nbsp;
+<br/>&nbsp;
+
+<br/>
+
+<tr>
+<td>Latitude : </td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<tr>
+<td>Longitude :</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+
+</div>
+
+
+
+<div style='display:none;' id='business'><br/>&nbsp;
+<br/>&nbsp;
+
+<br/>
+
+<tr>
+<td>Single Line Entry :</td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+
+</div>
+
+
+ <div style='display:none;' id='business'><br/>&nbsp;
+<br/>&nbsp;
+
+<br/>
+
+<tr>
+<td>File Name : </td>
+<td><input type="text" name="paddress" id="paddress" size="30"></td>
+</tr>
+<label for="fileupload"> Select a file to upload</label>
+</div>
+</body>
+</html>
