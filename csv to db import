@@ -7,3 +7,13 @@ LOAD DATA INFILE 'D:/Test.csv' INTO TABLE mp
   
   sample data
            "cgfdfrtv","N","abavc","abbc",102,"ab","","abc",""
+
+
+https://www.google.co.in/search?rlz=1C1AVSX_enIN598IN598&ei=eYnBWuXYIIrVvgS176b4Cg&q=load+the+excel+into+mysql+db&oq=load+the+excel+into+mysql+db&gs_l=psy-ab.3...1132761.1143105.0.1143775.0.0.0.0.0.0.0.0..0.0....0...1c.1.64.psy-ab..0.0.0....0.E2FG6GWb2BU
+
+https://chartio.com/resources/tutorials/excel-to-mysql/
+
+http://java2career.com/2012/10/insert-data-into-database-from-excel.html
+
+https://stackoverflow.com/questions/9148063/uploading-data-from-excel-file-to-database-using-java
+
