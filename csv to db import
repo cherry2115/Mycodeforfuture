@@ -1,0 +1,9 @@
+LOAD DATA INFILE 'D:/Test.csv' INTO TABLE mp
+  FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+  LINES TERMINATED BY '\r\n';
+  
+  
+  SELECT * FROM MP;
+  
+  sample data
+           "cgfdfrtv","N","abavc","abbc",102,"ab","","abc",""
