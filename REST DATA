@@ -1,0 +1,273 @@
+@SpringBootApplication	
+@RestController 	annotation informs to the Spring to render the result back to the caller.
+@RequestMapping(value = "student")  	 annotation is used to provide routing information.
+@RequestMapping(value = "student/{id}", method = RequestMethod.POST)	
+@ResponseBody	
+@PathVariable	
+@RequestBody	
+	
+@Autowired	
+@Test	
+
+BITBUCKET
+-----------------------
+Hi
+
+Please find below steps for pushing code to new branch
+
+1.	Clean maven project
+2.	install maven project
+3.	create folder
+4.	copy complete source to that folder
+5.	Rightclick in folder and gitbash here..
+6.	Copy Clone URL from Bitbucket UI.
+7.	$ git Clone URL 
+8.	$ GIT CHECKOUT feature/s3service
+9.	$ Git status
+10.	$  Git add src  pom.xml app.yml resources
+11.	$ Git commit
+12.	$  Git push origin feature/s3service
+13.	$  Git status
+
+ReactJS
+--------
+ Hello World 
+ The smallest React example looks like this:
+ReactDOM.render(
+  <h1>Hello, world!</h1>,
+  document.getElementById('root')
+);
+
+It renders a header saying “Hello, world!” on the page.
+Introducing JSX
+Consider this variable declaration:
+const element = <h1>Hello, world!</h1>;
+This funny tag syntax is neither a string nor HTML.
+It is called JSX, and it is a syntax extension to JavaScript. We recommend using it with React to describe what the UI should look like. JSX may remind you of a template language, but it comes with the full power of JavaScript.
+JSX produces React “elements”. We will explore rendering them to the DOM in the next section. Below, you can find the basics of JSX necessary to get you started.
+
+Why JSX?
+React embraces the fact that rendering logic is inherently coupled with other UI logic: how events are handled, how the state changes over time, and how the data is prepared for display.
+
+Spring Batch
+-----------------
+URL: http://www.mkyong.com/spring-batch/spring-batch-hello-world-example/	
+What is Spring Batch
+Spring Batch is a framework for batch processing – execution of a series of jobs. In Spring Batch, A job consists of many steps and each step consists of a READ-PROCESS-WRITE task or single operation task (tasklet).
+Tools and libraries used For Spring Batch
+1.	Maven 3
+2.	Eclipse 4.2
+3.	JDK 1.6
+4.	Spring Core 3.2.2.RELEASE
+5.	Spring OXM 3.2.2.RELEASE
+6.	Spring JDBC 3.2.2.RELEASE
+7.	Spring Batch 2.2.0.RELEASE
+
+https://www.tutorialspoint.com/spring_batch/spring_batch_overview.htm
+Batch processing is a processing mode which involves execution of series of automated complex jobs without user interaction. A batch process handles bulk data and runs for a long time.
+
+In addition to bulk processing, this framework provides functions for −
+•	Including logging and tracing
+•	Transaction management
+•	Job processing statistics
+•	Job restart
+•	Skip and Resource management
+Almost all the examples in this tutorial contain the following files −
+•	Configuration file (XML file)contains Job and Step, beans defining Readers and Writers, components like JobLauncher, JobRepository, Transaction Manager, and Data Source.
+•	Tasklet/processor (Java class)
+•	Java class with setters and getters (Java class (bean))
+•	Mapper class (Java class)
+•	Launcher class (Java class)
+
+Spring Boot Interview
+---------------------
+1.	What is spring-boot-starter-parent? 
+Ans: Actually this is an existing project given by spring team which contains Spring Boot supporting configuration data (remember just configuration data, it won’t download any jars), we have added this in a <parent> tag means, we are instructing Maven to consider our SpringBootHelloWorld project as a child to it, wait for a second, I will show you practically why we have to add spring-boot-starter-parent as parent   
+2.	I have added @SpringBootApplication annotation, means this is the starting point for our Spring Boot application	
+
+3.	SpringApplication.run(SpringBootApp.class, args); I am bootstrapping the application
+
+Spring Boot:
+-------------
+It is used to create standalone spring based application that you can just run because it needs very little spring configuration.Spring Boot does not generate code and there is absolutely no requirement for XML configuration.
+Advantages:
+o	Create stand-alone Spring applications that can be started using java -jar.
+o	Embed Tomcat, Jetty or Undertow directly. You don't need to deploy WAR files.
+o	It provides opinionated 'starter' POMs to simplify your Maven configuration.
+o	It automatically configure Spring whenever possible.
+o	It provides production-ready features such as metrics, health checks and externalized configuration.
+o	Absolutely no code generation and no requirement for XML configuration.
+Prerequisite of Spring Boot
+o	Java 1.8
+o	Gradle 2.3+ or Maven 3.0+
+o	Spring Framework 5.0.0.BUILD-SNAPSHOT(STS)
+Spring Boot Features
+o	Web Development
+o	YAML Support {{It provides convenient way for specifying hierarchical configuration. It is a superset of JSON. The Spring Application class automatically support YAML. It is successful alternative of properties.}}
+o	Spring Application
+o	Application events and listeners
+o	Admin features
+o	Externalized Configuration
+o	Properties Files
+o	Type-safe Configuration
+o	Logging {{Spring Boot uses Common logging for all internal logging. Logging dependencies are managed by default. We should not change logging dependencies, if there is no required customization is needed.}}
+o	Security
+List of files used for SIAM Project 
+1.Application.properties.
+2.Bootstrap.yml 
+
+
+
+		
+PUtty Commands:
+------------
+URL: http://www.fastwebhost.in/blog/putty-30-useful-putty-commands-for-beginners/
+
+	pwd 
+	cd ..
+	cd appdata
+	cat serviceurl.properties
+	ls -ltr
+	cd -	previous directory 
+
+
+Useful SSH Putty Commands
+1) How to find out where you are, the pwd command shows you present working directory.
+pwd
+2) Change directory
+cd
+The cd command is used to navigate into a specified directory on your server.
+Example: cd /home (moves you into the home folder)
+3) The same directory
+cd .
+Using this command you will remain in the same directory you were.
+4) Move me up one directory
+cd ..
+Above command will navigate two steps back from current directory
+5) Go to the previous directory
+cd –
+Above command will navigate to the previous directory.
+6) Go to Home folder
+cd ~
+Above command will navigate to the home directory on your server.
+7) Go to root
+cd /
+Above command will navigate to root.
+How to List Directories and Contents
+8) List files
+ls
+usage: ls [option] [file]
+Using the ls command in a folder will display all it’s content.
+Example: ls /home.
+Will return all content of the folder /home.
+9) Show me all files in a directory
+ls -a
+10) Show contents with file size
+ls -h
+If you wish to see a directory’s contents with file sizes just type ls -h
+11) How to see sub-directories recursively
+
+ls -r
+The ls -r command is used to see sub-directories recursively.
+12) How to see files by file size
+ls -is
+13) List all folders in directory with details
+ls -alh
+How to Copy files/folders with Putty Commands
+14) Copying a file
+cp
+To copy a file just use the cp ssh command.
+Example:
+cp filename.php /home/filename.php
+15) Copy a folder with all files
+cp -r
+This one is used to copy the entire folder with all it’s contents.
+16) Copy and rename
+cp filename.php /home/filename2.php
+How to Move files to different locations
+17) Moving a file
+mv
+Example: mv page.php /home/page.php
+18) Move and rename
+mv page.php /home/newpage.php
+19) Move file up one directory
+mv filename ..
+example: mv index.html/ ..
+How to Create files/folders using Putty Commands
+20) Create a folder
+mkdir
+example: mkdir new-folder
+21) Create a file
+touch
+Use the touch command to create different files and file extensions
+Example: touch index.php
+How to Compress/Uncompress files?
+22) Compressing folders
+zip -r foldername.zip foldername
+Example: zip -r newfolder.zip newfolder
+23) uncompressing folders
+unzip
+Example: unzip newfolder.zip
+24) Compressing folders using tar -czvf
+tar -czvf foldername.tar.gz foldername
+Example: tar -czvf wp-content.tar.gz wp-content
+25) uncompressing folders using tar -czvf
+tar -xvf foldername.tar.gz
+Example: tar -xvf wp-content.tar.gz
+How to Delete/Remove files?
+26) Delete a file
+rm
+To delete a file on your server just use the rm command.
+Example: rm index.php
+27) Delete all files from a directory
+rm *
+This command is used to delete all contents from a directory.
+Example: rm * foldername
+28) Delete a folder/directory
+rmdir
+Use this command to remove directories.
+How to change File permissions?
+29) Change file permissions
+chmod
+Example: chmod 775 newfolder
+30) Change permissions of folder and all files inside
+chmod 755 folder name -R
+Thanks for reading our article and we will keep updating the same articles with more useful commands in coming days. Keep checking this space for more Putty commands.
+You can download PuTTY from the below URL
+http://www.putty.org/
+
+steps How to create microservice
+1.based on our requirements we need to create .xsd file 
+2.yml file need to create 
+3.businessservice package
+	request.java
+	response.java
+4.proxyservice package
+	getuserdetailsheader.java
+	getuserdetailsfooter.java
+	getuserdetailsrequestjava
+	getuserdetailsresponse.java
+	getuserdetailsphone.java
+	objectfactory.java
+5.generate strups 
+<execution block>----------------</execution block >
+6.spring integration.xml 
+	1)spring-integration-database-context.xmlas database connection class
+	2)	<int:channel id="ggetUserDetailsErrorChannel</int:channel>
+		<int:channel id="ggetUserDetailsdefIPChannel</int:channel>
+		<int:channel id="ggetUserDetailsdefOPChannel</int:channel>
+		<int:channel id="ggetUserDetailsTransObj</int:channel>
+	
+3)<bean id="getUserDetailsTransformer"  class="com.syf.domainservice.cc.userdetails.service.GetUserDetailsTransformer" />
+4)<bean id="requestFactory"
+		class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+5) <int:json-to-object-transformer
+		input-channel="getUserDetailsResponse"
+6) <int:transformer id="AAMOutputId" ref="getUserDetailsTransformer"
+7) <int:service-activator input-channel="getuserdetailsErrorChannel"
+8) int:poller default="true" fixed-delay="1000" id="poller"></int:poller>
+7.
+
+
+
+
