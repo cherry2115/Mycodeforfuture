@@ -1,0 +1,80 @@
+BATCH PROCESS
+File Reception:
+•	SNSS services need to read/pull the sales/Remittance files from Internal S3 (Private Cloud).
+•	Input files which are in EBCDIC format will be converted to ASCII format for processing. Gentran will transmit the file using API.
+
+Preprocessing:
+•	Preprocessing required for converting Merchant specific file layout to the generic SNSS accepted file format.
+
+File validation:
+•	SNSS Systems should do the file validation for the below Sales/Remittance file format.
+•	File Validation details should be updated to the DB log table, which can be viewed in the online screen. 
+Confirmation File:
+•	Confirmation file should be generated for each input file as per the existing layout, files should be stored in Internal S3.
+•	Pre-processing required on the confirmation file needs to be done like the Mainframe system.
+o	Gap confirmation file processing Sequence number to EOR300.
+o	Sequence number in file name for commercial sales file.
+•	Confirmation file needs to be transmitted based on the existing condition for each Merchant.
+•	Confirmation file needs to be transmitted to merchant via Gentran from Internal S3, Merchant end confirmation file name should remain the same as per the existing system. SFTP transmission will be used to transmit the files to gentran.
+Fax File:
+•	Fax file should be generated based on the Merchant profile setup as per the existing logic in Mainframe system. 
+•	Fax file should be generated as per the existing layout and store to be stored in Internal S3.
+•	Fax file needs to be transmitted to merchant via Right Fax server. SFTP transmission will be used to transmit to Right Fax server
+Login as SIAM Authentication
+•	SIAM driven user creation and Siteminder/AAM System call for Authentication and Authorization.
+•	Role Driven approach (Access to specific screen based on user roles). Roles are currently Browse and Edit.
+
+REST API is created to perform a REST service call to fetch user details from AAM Service and CCTR DB. If any deviation in data found update CCTR DB and no data found in CCTR DB insert new record. 
+
+Application Access Management(AAM) is responsible for maintaining and providing user role profile data for key Synchrony applications. SIAM/Purple team will leverage AAM Services to Onboard new users into application with their corresponding user and profile information.
+Once user is onboarded/updated/deleted in SIAM, the information will also be replicated into AAM database/Application Specific Database and Vice Versa.
+Below modules / items are in scope for the SIAM project.
+
+•	Login Module - CCAdmin
+•	Micro Service Creation
+
+3.1.2	Microservice creation
+Creation of New Micro service
+
+
+Project Name: 	SIAM 
+Techonologies and Tools :	STS,BitBucket,SVN,Eclipse,Spring boot, Rest Webservices,oracle db with SQL Developer,SOAPUI,Junit,Pivotal Tomcat,JDK 1.8x. uDeploy Client,HPOV Client
+Project Description:	Application Access Management(AAM) is responsible for maintaining and providing user role profile data for key Synchrony applications. SIAM/Purple team will leverage AAM Services to Onboard new users into application with their corresponding user and profile information.
+Once user is onboarded/updated/deleted in SIAM, the information will also be replicated into AAM database/Application Specific Database and Vice Versa.
+Scope of Project:	
+1.Micro Service Creation:	REST API is created to perform a REST service call to fetch user details from AAM Service and CCTR DB. If any deviation in data found update CCTR DB and no data found in CCTR DB insert new record. 
+	Steps:
+	â€¢	Call AAM Rest service to fetch Logged In user details
+	â€¢	Connect to CCTR database by passing AAM response and logged in user name
+	â€¢	Fetch the details from CCTR database
+	â€¢	If User details found in CCTR DB, then need to compare with both AAM response and CCTR data.
+	â€¢	Any difference in the AAM response and CCTR data found - update CCTR DB with AAM response.
+	â€¢	if no details of logged in User available in CCTR DB - Insert details fetched from AAM service.
+	â€¢	If AAM service could not be connected / Service fail - Continue to fetch details from CCTR DB.
+
+2.CCAdmin Login with Newly created microservice :	Integrate newly created REST based microservice with CCAdmin Application
+
+integrate existing microservice with newly created microservice and bases upon userrole we can able to login CCAdmin Apllication with corresponding CCadmin home page or not 
+
+
+
+•	Call AAM Rest service to fetch Logged In user details
+•	userdetails Internal Call to CCTR database based on the AAM response for fetching the details from CCTR database
+•	Validating the response from CCDB and AAM to be same, if response is same then generate response for userdetail service.
+•	Response from AAM doesn’t match with CCTR data update the response from AAM to CCDB and generate response for userdetail service.
+•	New User Logs in for first time, details of logged in user will not be available in CCTR DB - Insert details fetched from AAM service and generate response for userdetail service.
+•	AAM service fails need to rely on CCTR DB data.
+•	AAM Service fails and no data found in CCTR DB then error Page to be shown.
+•	Website Activity entry for new user Insert or modify or Delete.
+
+Step 1: validate the Received GetUserDetailsRequest 
+Step 2: If received request is not valid means send error response
+Step 3: If received request is Valid then call AAMRestService to fetch UserDetails 
+Step 4: If AAMRestService call fails, call CCDB procedure USER_DETAILS_PACK.UPDATE_CC_USER_ROLE by passing user_name received from GetUserDetails Request.
+Step 5:If AAMRestService SUCCESS to fetch UserDetails means Process Response and prepare Input for 
+   	 calling CC DB Procedure USER_DETAILS_PACK.UPDATE_CC_USER_ROLE
+Step 6: If User is not available in CC_USER table, insert record to CC_USER and user role details to USER_ROLE table in CCTRPR database.
+Step 7: then Prepare GetUserDetails Success Response and send success response.
+Step 8: If user is available in CC_USER table fetch the role from USER_ROLE table and compare with inputs received for procedure. If user role changed update USER_ROLE table with new user role received from AAM response.
+Step 9: If Deactivation_Flag=’Y’ then  update CC_USER table, USEr_NAME column with <<USERname>>’_’<<systemDate>> to soft delete user and return user deactivated error message in response.
+
