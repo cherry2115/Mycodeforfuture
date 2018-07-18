@@ -1,0 +1,72 @@
+
+
+1.	Install GIT clone
+2.	Open Bit bucket and create new branch
+3.	Open eclipse Run As maven Clean  (SUCCESS)
+  Run As maven Install   (SUCCESS)
+4.	Go to workspace select all folders 
+5.	Create new folder and paste all selected folders 
+6.	Right click select GIT Bash Here..
+7.	Copy clone URI  URL from BitBucket
+8.	Automatically git CMD will open need to give following commands 
+$     paste clone URI URL (give ur Citrix login in Authentication) if success we find 502485857@vpwcxxdda011898 MINGW64 /c/workpaceBitbucket/SNSS/snss-batch 
+$      git push origin  Branchname (i.e for example: git push origin Feature/SNSS) 
+$      git  add* 
+$      git pull origin Feature/SNSS-Batch
+$      git Status
+$      git commit -m 'snss batch'
+$      git push origin  Branchname (i.e for example: git push origin Feature/SNSS) 
+
+                9.Refresh Bitbucket check code commited or not.
+
+$              Cd  src
+$              ls -ltr
+$     rm -r mapper
+$     git pull
+$     git push
+$     git add -u mapper
+$     git commit -m "Mapper fodler deleted"
+$      git push origin Feature/SNSS-Batch
+
+Hi
+
+Please find below steps for pushing code to new branch
+
+1.	Clean maven project
+2.	install maven project
+3.	create folder
+4.	copy complete source to that folder
+5.	Rightclick in folder and gitbash here..
+6.	Copy Clone URL from Bitbucket UI.
+7.	$ git Clone URL 
+8.	$ GIT CHECKOUT feature/s3service
+9.	$ Git status
+10.	$  Git add src  pom.xml app.yml resources
+11.	$ Git commit
+12.	$  Git push origin feature/s3service
+13.	$  Git status
+
+
+1.	Clean maven project
+2.	install maven project
+3.	create folder
+4.	Rightclick in folder and gitbash here..
+5.	Copy Clone URL from Bitbucket UI.
+6.	$ git Clone URL 
+7.	$ GIT checkout  feature/SnssDBService
+8.	Close cmd
+9.	Copy and paste code to created in feature branch sub folder as ss-snss-dataservice           [[[H:\CLONING DATA serv\ss-snss-dataservice]]]   ss-snss-dataservice
+
+10.	git checkout feature/SnssDBService
+
+11.	$ git status
+
+12.	$ git add pom.xml manifest.yml baseManifest.yml src .project .classpath .settings
+
+13.	  $ git status
+
+14.	$ git commit -m 'cometed db service code'
+
+15.	$ git push origin feature/SnssDBService
+
+16.	Check bitbucket url 
