@@ -1,0 +1,266 @@
+Web services:
+Web service is a technology to communicate one programming language with another. For example, java programming language can interact with PHP and .Net by using web services. In other words, web service provides a way to achieve interoperability.
+web services such as protocols, SOAP, RESTful, java web service implementation, JAX-WS and JAX-RS tutorials and examples.
+Java Web Services Tutorial
+In this tutorial, you will be able to learn java web services and its specifications such as JAX-WS and JAX-RS.
+There are two ways to write the code for JAX-WS by RPC style and Document style. Like JAX-WS, JAX-RS can be written by Jersey and REST easy. We will learn all these technologies later.
+
+1.DB SERVICEAPP.java
+@SpringBootApplication
+//@Configuration
+//@EntityScan(basePackages = { "com.abc.db.entity" })
+@ComponentScan("com.bank ")
+//@EnableTransactionManagement
+@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+2. Controller.java
+
+@RestController
+@RequestMapping(value = "onlineapp")
+@Autowired
+@RequestMapping(value = "checkFileName", method = RequestMethod.POST, consumes = "application/json")
+Public @ResponseBody ResponseEntity<String> checkFileName(@RequestBody RequestVO objRequestVO) throws Exception {
+		String response = iDbService.checkFileName(objRequestVO.getFilename());
+		return (new ResponseEntity<String>(response, HttpStatus.OK));
+}
+3. iDbService.java
+@Override
+	public String checkFileName(String fileName) throws Exception{
+		String senderId=iDbDao.checkFileName(fileName);
+		return senderId;
+4. iDbDao.java
+@Override
+public String checkFileName(String fileName) {
+try {
+Query query = entityManager.createQuery("FROM MstrConfig WHERE input_file_nm = :filename");
+	query.setParameter("filename", fileName);
+	MstrConfig MstrConfig = (MstrConfig) query.getSingleResult();
+		return MstrConfig.getSenderId();
+} catch (Exception e) {
+	logger.error("Exception::IDbService " + DbDAO.class, e);
+		return null;
+} finally {
+			entityManager.close();
+		}
+
+	}
+Rest Client Code
+Consuming rest service by using rest Client
+public String addMerchantProfile(MerchantProfileVO merchantProfileVO) {
+
+HttpHeaders headers = SalesUtil.getHeaderDetails();
+	headers.setContentType(MediaType.APPLICATION_JSON);
+	RestTemplate restTemplate = new RestTemplate();
+	String url = "www.google.com”
+final HttpEntity<MerchantProfileVO> requestEntity = new HttpEntity<MerchantProfileVO>(merchantProfileVO,headers);
+	ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
+		if (response.getBody().equals("SUCCESS")) {
+			return "SUCCESS";
+		}
+		return "FAILURE";
+}
+
+
+@Value("${spring.loginDetails.serviceurl.username}")
+Private String Username;
+@Component
+@ConfigurationProperties(prefix = "spring")
+public class YamlConfiguration {
+
+	private Map<String, Object> loginDetails = new HashMap<>();
+
+	public Map<String, Object> getLoginDetails() {
+		return loginDetails;
+	}
+
+	public void setLoginDetails(Map<String, Object> loginDetails) {
+		this.loginDetails = loginDetails;
+	}
+
+
+Web Services:
+Webservice:
+o	Webservice is a client server application or application component for communication.
+o	method of communication between two devices over network.
+o	is a software system for interoperable machine to machine communication.
+o	is a collection of standards or protocols for exchanging information between two devices or application.
+Example: java, .net or PHP applications can communicate with other applications through web service over the network. For example, java application can interact with Java, .Net and PHP applications. So web service is a language independent way of communication.
+Types of webservices:
+There are mainly two types of web services.
+1.	SOAP web services.
+2.	RESTful web services.
+1.	SOAP web services.
+•	SOAP stands for Simple Object Access Protocol. It is a XML-based protocol for accessing web services.
+•	SOAP is a W3C recommendation for communication between two applications.
+•	SOAP is XML based protocol. It is platform independent and language independent. By using SOAP, you will be able to interact with other programming language applications.
+Advantages of Soap Web Services:
+1.	WS Security: SOAP defines its own security known as WS Security.
+2.	Language and Platform independent: SOAP web services can be written in any programming language and executed in any platform.
+Disadvantages of Soap Web Services
+1.Slow: SOAP uses XML format that must be parsed to be read. It defines many standards that must be followed while developing the SOAP applications. So it is slow and consumes more bandwidth and resource.
+2. WSDL dependent: SOAP uses WSDL and doesn't have any other mechanism to discover the service.
+
+2.	RESTful web services:
+•	REST stands for REpresentational State Transfer.
+•	REST is an architectural style not a protocol.
+Advantages of RESTful Web Services
+1.	Fast: RESTful Web Services are fast because there is no strict specification like SOAP. It consumes less bandwidth and resource.
+2.	Language and Platform independent: RESTful web services can be written in any programming language and executed in any platform.
+3.	Can use SOAP: RESTful web services can use SOAP web services as the implementation.
+4.	Permits different data format: RESTful web service permits different data format such as Plain Text, HTML, XML and JSON.
+Webservice Components:
+There are three major web service components.
+1.	SOAP
+2.	WSDL
+3.	UDDI
+1.	SOAP
+•	SOAP is an acronym for Simple Object Access Protocol.
+•	SOAP is a XML-based protocol for accessing web services.
+•	SOAP is a W3C recommendation for communication between applications.
+•	SOAP is XML based, so it is platform independent and language independent. In other words, it can be used with Java, .Net or PHP language on any platform.
+2.	WSDL
+•	WSDL is an acronym for Web Services Description Language.
+•	WSDL is a xml document containing information about web services such as method name, method parameter and how to access it.
+•	WSDL is a part of UDDI. It acts as a interface between web service applications.
+•	WSDL is pronounced as wiz-dull
+3. UDDI
+•	UDDI is an acronym for Universal Description, Discovery and Integration.
+•	UDDI is a XML based framework for describing, discovering and integrating web services.
+•	UDDI is a directory of web service interfaces described by WSDL, containing information about web services.
+
+
+
+
+
+
+Annotations:
+@RestController
+@RequestMapping(value = "test")
+@Autowired
+@RequestMapping(value = "checkFileFomat", method = RequestMethod.POST)
+@ResponseBody
+@RequestBody
+@SuppressWarnings({ "unchecked", "rawtypes" })
+Appprops.java
+@ConfigurationProperties
+@RefreshScope
+@Component
+public class SnssDataProps {
+	
+	@Value("${poolSize.minPoolSize:5}")
+	private String minPoolSize;
+	
+
+
+2.Login Scenario:
+1. Vo classes:
+	Request.java
+	Response.java
+2. controller class:
+LoginController.java
+LoginController.java
+@RestController
+public class LoginController {
+private static final Logger logger = LogManager.getLogger(LoginController.class);
+	  @Autowired
+	  private LoginService loginservice;
+	  
+	  @Autowired
+	  private HttpServletRequest request;
+	  
+	  @Autowired
+	  private HttpSession session;
+	  
+	
+  @RequestMapping(value = "/login", method = RequestMethod.POST)
+public @ResponseBody ResponseEntity<String> showWelcomePage(@RequestBody Request request) {
+		// session.setAttribute("userId", request.getUserId());
+		String response = loginservice.validateUser(Request);
+		
+		if(null!= Response) {
+			//return Response;
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(Response);
+		}
+		return null;
+		
+		}
+	  
+	 
+	  @RequestMapping("/logout")
+		public String sessionTimeout() {
+		  HttpSession session = request.getSession();
+			logger.debug("Session Time out");
+			try{
+				session.invalidate();
+			}catch(Exception e){
+				logger.debug("Exception Occurred : "+e);
+			}
+			return "redirect:/login";
+		}
+
+3.Service classes:
+LoginServiceImpl.java
+@Service
+public class LoginServiceImpl implements LoginService {
+@Autowired
+RestClient restClient;
+	@Override
+public String validateUser(Request request) {
+return restClient.checkLogin(request);
+  }
+}
+4.	RestClientclasses:
+RestClient.java
+@Component
+public class RestClient {
+public String checkLogin(Request request) {
+		
+	request.setUserId(request.getUserId());
+	request.setApplicationId(ICommonConstants.APPLICATION_ID);
+	HttpHeaders headers = new HttpHeaders();
+	headers.setContentType(MediaType.APPLICATION_JSON);
+	headers.set("username", username);
+	headers.set("password", password);
+	RestTemplate restTemplate = new RestTemplate();
+	HttpEntity<Request> requestEntity = new HttpEntity<Request>(request, headers);
+	return restTemplate.postForEntity(ICommonConstants.SERVICE,requestEntity, String.class).getBody();
+	
+	}
+
+}
+
+
+
+Impact Analysis:
+When user tries to login CCAdmin application, after entering valid login credentials(ssoID and password) request will go to CCAdminAction.java  class.
+After executing of execute() method in CCADMInAction.java, doProcess() method in CCAdminHelper.java will invoke. 
+We start preparing the request to fetch the details of logged in user here.
+A call to an internal method called getuserdetails()  is done, in this method we populate the Request for ‘getUserDetails’ service.
+GetUserDetails – Service takes the following as inputs
+1.	UserName – loggedIn user SSO ID,
+2.	LanguagePreference – from CCAdmonVO we are populating this value (In local it is going Null)
+3.	SystemId – We are reading IcommonConstants file for constant ‘SYSTEM_ID’ and set here .
+4.	ChannelId - We are reading IcommonConstants file for constant ‘CHANNEL_NAME’ and set here.
+5.	TokenID – We generate a new token using getTokenId() from commonUtil.java class.
+Using the request populate above a call to getuserdetails() in IntenalUser.java is made. This method takes GetUserDetailsRequest and Map(sessionMap) as input parameters. In this method if getUserKey not null we fetch userobj from CacheManager. Otherwise we get the proxy details from ‘ServiceBean.xml’ using AppLookupInfo.getServiceBean(ICommonConstants.USER_DETAILS) to call Webservices. For this we need to configure property value in IcommonConstants and we details in service details are configured in serviceUrl.properties and Service Host details we have configured in pluginconf.properties. We call getuserDetails() with getUserDetailsRequest as parameter. 
+From the response we are using the following fields and populating userObj(InternalUser).
+1.	Username
+2.	Userid
+3.	responseCode
+4.	lastSuccessfulLoginDt
+For Role 
+1.	roleId
+2.	roleDesc
+Once we get response we call WSResponseProcessUtil.processUserDetailsResponse() to fetch userObj. We made use of smooks configurations in the file smooks-ssouser.xml
+We get Role using WSResponseProcessUtil.processUserRoleDetailsResponse() and set the value to userObj.setRole().
+We populate key from CommonUtil.getcacheKey()  and set the userObj to cache using this key.
+
+Classes Identified for modification for service change
+1.	CCADminHelper – getUserDetails()
+2.	InternalUser – getUserDetails()
+3.	smooks-ssouser.xml
+4.	WSResponseProcessUtil – processUserDetailsResponse(),
+   processUserRoleDetailsResponse();
+5.	serviceBean.xml
+6.	ServiceUrl.properties
+7.	Pluginconf.properties
+
