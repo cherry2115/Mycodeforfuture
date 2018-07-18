@@ -1,0 +1,1614 @@
+
+
+service:
+---
+
+package com...db.service;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com...db.dao.ISnssDbDao;
+import com...db.entity.AuditInfo;
+import com..entity.BatchDetailsRec;
+import com..entity.BatchLog;
+import com..entity.MerchantProfile;
+import com..entity.MstrConfig;
+import com..model.AlphaListResponse;
+import com..model.BatchConfigurationRequest;
+import com..model.BatchConfigurationResponse;
+import com..model.MasterConfiguration;
+import com..model.MerchantLogBrowseRequest;
+import com..model.MerchantLogBrowseResponse;
+import com..model.MerchantLogListRequest;
+import com..model.MerchantLogListResponse;
+import com..model.MerchantProfile;
+import com..util.CommonUtil;
+import com..vo.RequestVO;
+
+
+@Service
+public class SnssDbService implements ISnssDbService {
+	@Autowired
+	private ISnssDbDao isnssDbDao;
+
+	// view all in masterconfig table
+	@Override
+	public List<MstrConfig> getMasterConfig()throws Exception {
+		return isnssDbDao.getMasterConfig();
+	}
+
+	// search in master config table
+	@Override
+	public MstrConfig getMstrConfig(String fileName) throws Exception{
+		
+		MstrConfig obj = isnssDbDao.getMstrConfig(fileName);
+		return obj;
+	}
+
+	@Override
+	public MstrConfig updateMstConfig(MstrConfig updatemstr) throws Exception {
+		isnssDbDao.updateMstConfig(updatemstr);
+		return updatemstr;
+
+	}
+
+	// merchant profile table
+	@Override
+	public MerchantProfile getSenderId(String senderId) throws Exception{
+		MerchantProfile obj = (MerchantProfile) isnssDbDao.getSenderId(senderId);
+		return obj;
+	}
+
+	@Override
+	public MerchantProfile getAllProfile(String snSenderId)throws Exception {
+		MerchantProfile obj = (MerchantProfile) isnssDbDao.getAllProfile(snSenderId);
+		return obj;
+	}
+
+	@Override
+	public MerchantProfile insertMerchantProfile(MerchantProfile MerchantProfile) throws Exception {
+		MerchantProfile obj = null;
+		String snMerchDateTime=CommonUtil.getCurrentTimeStamp();
+		
+		MerchantProfile.setSnMerchDateTime(CommonUtil.convertToDate(snMerchDateTime));
+		Boolean isAllowed=validateSenderIDForDuplicateForMerchantProfile(MerchantProfile.getSnSenderId());
+		if(isAllowed){
+		obj = isnssDbDao.insertMerchantProfile(MerchantProfile);
+		}
+		return obj;
+	}
+
+	@Override
+	public MstrConfig insertMstrConfig(MstrConfig MstrConfig) throws Exception {
+		MstrConfig obj = isnssDbDao.insertMstrConfig(MstrConfig);
+		return obj;
+	}
+	
+	@Override
+	public AuditInfo insertAuditInfo(AuditInfo TempFlStr) throws Exception {
+		AuditInfo obj = isnssDbDao.insertAuditInfo(TempFlStr);
+		return obj;
+	}
+
+	
+	@Override
+	public BatchDetailsRec updateBatchDetail(BatchDetailsRec updatemstr) throws Exception {
+		isnssDbDao.updateBatchDetail(updatemstr);
+		return updatemstr;
+
+	}
+
+	/*
+	 * Code for updating the file processing details in temporary table  
+	 */
+	
+	@Override
+	public AuditInfo updateAuditInfo(AuditInfo TempFlStr) throws Exception {
+		isnssDbDao.updateAuditInfo(TempFlStr);
+		return TempFlStr;
+
+	}
+	
+	/*
+	 * Code for deleting the processed file details in temporary table  
+	 */
+	@Override
+	public String delTempFileData(String filename) throws Exception {
+		String response=isnssDbDao.delTempFileData(filename);
+		return response;
+
+	}
+	
+	/*
+	 * Code for fetching the file details from temporary table based on the batch name  
+	 */
+	@Override
+	public List<AuditInfo> getAuditInfoList(String batchName) throws Exception {
+		List<AuditInfo> TempFlStr=isnssDbDao.getAuditInfoList(batchName);
+		return TempFlStr;
+
+	}
+
+	@Override
+	public MstrConfig checkFileFormat(String fileName)throws Exception {
+		
+		MstrConfig MstrConfig=isnssDbDao.checkFileFormat(fileName);
+		return MstrConfig;
+	}
+
+	@Override
+	public String checkFileName(String fileName) throws Exception{
+		String senderId=isnssDbDao.checkFileName(fileName);
+		return senderId;
+	}
+	
+	@Override
+	public String getBatchLogDetails(BatchLog BatchLog)throws Exception{
+		String response = isnssDbDao.postBatchLogs(BatchLog);
+		return response;
+	}
+
+	
+
+	
+
+	@Override
+	public BatchLog insertBatchLog(BatchLog Batchlog) throws Exception {
+		BatchLog obj = isnssDbDao.insertBatchLog(Batchlog);
+		return obj;
+	}
+
+	@Override
+	public BatchDetailsRec insertBatchRcrd(BatchDetailsRec BatchDetailsRec) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<BatchLog> getAllLog(String snSenderId) throws Exception{
+		List<BatchLog> obj = (List<BatchLog>) isnssDbDao.getAllLog(snSenderId);
+		return obj;
+	}
+
+	@Override
+	public List<BatchLog> getDupCheckDetails(String snSenderId) throws Exception {
+		List<BatchLog> obj = (List<BatchLog>) isnssDbDao.getDupCheckDetails(snSenderId);
+		return obj;
+	}
+    
+	@Override
+	public MstrConfig fetchMstrCnfgDetails(String filename) {
+		MstrConfig obj = isnssDbDao.getMstrCnfgDetails(filename);
+		return obj;
+	}
+
+	@Override
+	public MerchantProfile updateMerchantProfile(MerchantProfile updatemerchant) throws Exception {
+		isnssDbDao.updateMerchantProfile(updatemerchant);
+		return updatemerchant;
+	}
+
+	@Override
+	public String updateGapSequenceId() throws Exception{
+		String sequenceId=isnssDbDao.updateGapSequenceId();
+		return sequenceId;
+	}
+
+	@Override
+	public List<MerchantLogListResponse> getLogSearchDetails(MerchantLogListRequest merchantLogListRequest) throws ParseException {
+		List<MerchantLogListResponse> jsonResponse = new ArrayList<MerchantLogListResponse>();
+		List<Object> daoResponse = isnssDbDao.getLogSearchDetails(merchantLogListRequest);
+		return construcMerchantListSearchReponse(jsonResponse, daoResponse);
+	}
+	
+	private List<MerchantLogListResponse> construcMerchantListSearchReponse(List<MerchantLogListResponse> jsonResponse,
+			List<Object> daoResponse) throws ParseException {
+		Object[] mResult = null;
+		String[] s1 = null;
+		String[] s2 = null;
+		String[] s3 = null;
+		for (Object obj : daoResponse) {
+			mResult = (Object[]) obj;
+			MerchantLogListResponse response = new MerchantLogListResponse();
+			response.setRecevingApplicaiton(mResult[0] == null ? null : (String) mResult[0]);
+			//response.setRecevingApplicaiton(StringUtils.isEmpty(tnssBatchLog.getSnRevApplicationId()) ?  " " :  tnssBatchLog.getSnRevApplicationId());
+			//String dateTime=tnssBatchLog.getSnRevDateTime();
+			
+			if(mResult[1]!=null)
+			{
+				String dt2 = (String) mResult[1];
+				String recvdateTime = "";
+
+				recvdateTime = new SimpleDateFormat("MM/dd/yy HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).parse(dt2.trim()));
+				response.setDateTime(mResult[1] == null ? null : recvdateTime);
+			
+			//s3 = simpleDateFormat.format(dt2).split(" ");
+			s1=recvdateTime.split(" " );
+			
+			}
+			response.setDate(mResult[1] == null ? null : s1[0]);
+			response.setTime(mResult[1] == null ? null : s1[1]);
+			//response.setDateTime(mResult[1] == null ? null : recvdateTime);
+			
+			//String s = sdf.format(date);
+			response.setStatus(mResult[2] == null ? null : (String) mResult[2]);
+			response.setJobName(mResult[3] == null ? null : (String) mResult[3]);
+			response.setRecordCount(mResult[4] == null ? null : (Integer) mResult[4]);
+			response.setSalesCount(mResult[5] == null ? null : (Integer) mResult[5]);
+			response.setReturnCount(mResult[6] == null ? null : (Integer) mResult[6]);
+			response.setSalesAmount(mResult[7] == null ? null : (BigDecimal) mResult[7]);
+			response.setReturnAmount(mResult[8] == null ? null : (BigDecimal) mResult[8]);
+			response.setNetAmount(mResult[9] == null ? null : (BigDecimal) mResult[9]);
+			response.setComments(mResult[10] == null ? null : (String) mResult[10]);
+			response.setSenderId(mResult[11] == null ? null : (String) mResult[11]);
+			response.setPaymentAmount(mResult[7] == null ? null : (BigDecimal) mResult[7]);
+			response.setPaymentCount(mResult[5] == null ? null : (Integer) mResult[5]);
+			/*response.setStatus(tnssBatchLog.getSnRecvStatus()== " " ? null :tnssBatchLog.getSnRecvStatus());
+			response.setJobName(tnssBatchLog.getSnRevJobName()== " " ? null :tnssBatchLog.getSnRevJobName());
+	        Integer RecordCount=tnssBatchLog.getSnRevRecordCount();
+	        Integer salesCount=tnssBatchLog.getSnRecvSalesCount();
+	        Integer returnCount=tnssBatchLog.getSnRecvReturnsCount();
+	        BigDecimal  salesAmount=tnssBatchLog.getSnRecvSalesAmount();
+	        BigDecimal  returnAmount=tnssBatchLog.getSnRecvReturnsAmount();
+	        BigDecimal  netAmount=tnssBatchLog.getSnRecvNetAmount().add(tnssBatchLog.getSnSendNetAmount());
+	        Integer paymentCount=tnssBatchLog.getSnRecvSalesCount();
+	        BigDecimal paymentAmount=tnssBatchLog.getSnRecvSalesAmount();*/
+	       /* response.setSalesCount(salesCount);
+	        response.setReturnCount(returnCount);
+	        response.setRecordCount(RecordCount);
+	        response.setSalesAmount(salesAmount);
+	        response.setReturnAmount(returnAmount);
+	        response.setNetAmount(netAmount);
+	        response.setComments(StringUtils.isEmpty(tnssBatchLog.getSnLogComments()) ? "  " :tnssBatchLog.getSnLogComments());
+	        response.setPaymentCount(paymentCount);
+	        response.setPaymentAmount(paymentAmount);
+	        response.setSenderId(tnssBatchLog.getSnSenderId());*/
+			jsonResponse.add(response);
+			
+
+		}
+		return jsonResponse;
+
+	}
+
+	@Override
+	public MerchantLogBrowseResponse getLogDetails(MerchantLogBrowseRequest merchantLogBrowseRequest) throws Exception {
+		MerchantLogBrowseResponse jsonresponse = new MerchantLogBrowseResponse();
+		List<Object> daoResponse = isnssDbDao.getLogDetails(merchantLogBrowseRequest);
+		return construcMerchantListReponse(jsonresponse, daoResponse);
+	}
+	
+	private MerchantLogBrowseResponse construcMerchantListReponse(MerchantLogBrowseResponse jsonresponse,
+			List<Object> daoResponse) throws ParseException {
+		Object[] mResult = null;
+		MerchantLogBrowseResponse merchantLogBrowseResponse = new MerchantLogBrowseResponse();
+		MerchantProfile merchantProfile = new MerchantProfile();
+		String pattern = "MM-dd-YY HH:mm:ss";
+		//SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = null;
+		String date1 = null;
+		String[] s1 = null;
+		String[] s2 = null;
+		String[] s3 = null;
+
+		for (Object obj : daoResponse) {
+			mResult = (Object[]) obj;
+			merchantLogBrowseResponse.setRecvRecordCount(mResult[0] == null ? null : (Integer) mResult[0]);
+			merchantLogBrowseResponse.setRecvReturnCount(mResult[1] == null ? null : (Integer) mResult[1]);
+			merchantLogBrowseResponse.setRecvSalesAmount(mResult[2] == null ? null : (BigDecimal) mResult[2]);
+			merchantLogBrowseResponse.setRecvSalesCount(mResult[3] == null ? null : (Integer) mResult[3]);
+			merchantLogBrowseResponse.setRecvReturnAmount(mResult[4] == null ? null : (BigDecimal) mResult[4]);
+			merchantLogBrowseResponse.setRecvNetAmount(mResult[5] == null ? null : (BigDecimal) mResult[5]);
+			merchantLogBrowseResponse.setStatus(mResult[6] == null ? null : (String) mResult[6]);
+			if (mResult[7] !=null) {
+				
+				String dt = (String) mResult[7];
+				
+				String sendDateTime = "";
+
+				sendDateTime = new SimpleDateFormat("MM-dd-yy HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).parse(dt.trim()));
+				
+			merchantLogBrowseResponse.setSendDateTime(mResult[7] == null ? null : sendDateTime);
+			
+			//s1 = simpleDateFormat.format(new Date(sendDateTime)).split(" ");
+			s1=sendDateTime.split(" ");
+			}
+			merchantLogBrowseResponse.setSendDate(mResult[7] == null ? "00-00-00" : s1[0]);
+			merchantLogBrowseResponse.setSendTime(mResult[7] == null ? "00:00:00" : s1[1]);
+			merchantLogBrowseResponse.setSendrecordCount(mResult[8] == null ? null : (Integer) mResult[8]);
+			merchantLogBrowseResponse.setSendSalesAmount(mResult[9] == null ? null : (BigDecimal) mResult[9]);
+			merchantLogBrowseResponse.setSendSalesCount(mResult[10] == null ? null : (Integer) mResult[10]);
+			merchantLogBrowseResponse.setSendReturnAmount(mResult[11] == null ? null : (BigDecimal) mResult[11]);
+			merchantLogBrowseResponse.setSendReturnCount(mResult[12] == null ? null : (Integer) mResult[12]);
+			merchantLogBrowseResponse.setSendNetAmount(mResult[13] == null ? null : (BigDecimal) mResult[13]);
+			merchantLogBrowseResponse.setOverrideDuplicate(mResult[14] == null ? null : (String) mResult[14]);
+			System.out.println("Override Duplicate"+(String) mResult[14]);
+			merchantLogBrowseResponse.setOverrideUserId(mResult[15] == null ? null : (String) mResult[15]);
+			if (mResult[16] !=null) {
+				String dt1 = (String) mResult[16];
+				String overrideDateTime = "";
+
+				overrideDateTime = new SimpleDateFormat("MM-dd-yy HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).parse(dt1.trim()));
+				
+			merchantLogBrowseResponse.setOverrideDateTime(mResult[16] == null ? null : overrideDateTime);
+			
+				//s2 = simpleDateFormat.format(dt1).split(" ");
+			    s2=overrideDateTime.split(" ");
+			}
+				merchantLogBrowseResponse.setOverrideDate(mResult[16] == null ? "00-00-00" : s2[0]);
+				merchantLogBrowseResponse.setOverrideTime(mResult[16] == null ? "00:00:00" : s2[1]);
+			
+			merchantLogBrowseResponse.setComments(mResult[17] == null ? null : (String) mResult[17]);
+			merchantProfile.setSnCrossMarketInd(mResult[18] == null ? null : (String) mResult[18]);
+			merchantProfile.setSnMerchApplType(mResult[19] == null ? null : (String) mResult[19]);
+			merchantProfile.setSnMerchApplSubType(mResult[20] == null ? null : (String) mResult[20]);
+			merchantLogBrowseResponse.setMerchantProfile(merchantProfile);
+			//System.out.println(mResult[21].toString()+"Dateeeeeeeeeeeeeeeeeeeeeeeeeee");
+			//Date recvdatetime = inputFormat.parse(mResult[21]);
+			if(mResult[21]!=null)
+			{
+				String dt2 = (String) mResult[21];
+				String recvdateTime = "";
+
+				recvdateTime = new SimpleDateFormat("MM-dd-yy HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).parse(dt2.trim()));
+			merchantLogBrowseResponse.setRecvDateTime(mResult[21] == null ? null : recvdateTime);
+			
+			//s3 = simpleDateFormat.format(dt2).split(" ");
+			s3=recvdateTime.split(" " );
+			}
+			merchantLogBrowseResponse.setRecvDate(mResult[21] == null ? "00-00-00" : s3[0]);
+			merchantLogBrowseResponse.setRecvTime(mResult[21] == null ? "00:00:00" : s3[1]);
+			
+			
+			merchantLogBrowseResponse.setApplicationId(mResult[22] == null ? null : (String) mResult[22]);
+			System.out.println(merchantLogBrowseResponse.getApplicationId());
+			merchantLogBrowseResponse.setJobName(mResult[23] == null ? null : (String) mResult[23]);
+			merchantLogBrowseResponse.setJobNumber(mResult[24] == null ? null : (Integer) mResult[24]);
+			merchantLogBrowseResponse.setFileId(mResult[25] == null ? null : (String) mResult[25]);
+			merchantLogBrowseResponse.setRecvApplicationId(mResult[26] == null ? null : (String) mResult[26]);
+			merchantLogBrowseResponse.setClientName(mResult[27] == null ? null : (String) mResult[27]);
+			merchantLogBrowseResponse.setInputFileNm(mResult[28] == null ? null : (String) mResult[28]);
+			
+		}
+
+		return merchantLogBrowseResponse;
+	}
+
+	@Override
+	public MerchantLogBrowseResponse updateMerchantLogDetail(MerchantLogBrowseRequest merchantLogBrowseRequest) throws Exception {
+		MerchantLogBrowseResponse jsonresponse=new MerchantLogBrowseResponse();
+		List<Object> obj  =(List<Object>) isnssDbDao.updateMerchantLogDetail(merchantLogBrowseRequest);
+	
+		return 	construcMerchantListReponse(jsonresponse, obj);
+	}
+
+	@Override
+	public List<AlphaListResponse> getAlphaDetails(String sNALFACrossMarketInd) {
+		List<AlphaListResponse> jsonResponse = new ArrayList<AlphaListResponse>();
+		List<Object> daoResponse = isnssDbDao.getAlphaDetails(sNALFACrossMarketInd);
+		return constructAplhaListReponse(jsonResponse, daoResponse);
+	}
+	
+	private List<AlphaListResponse> constructAplhaListReponse(List<AlphaListResponse> jsonResponse,  
+			List<Object> daoResponse) {
+		// TODO Auto-generated method stub
+		Object[] mResult = null;
+		for (Object obj : daoResponse) {
+			AlphaListResponse response = new AlphaListResponse();
+			//MasterConfiguration masterConfiguration=new MasterConfiguration();
+			mResult = (Object[]) obj;
+			response.setInputFileNm(mResult[0] == null ? null : (String) mResult[0]);
+			response.setSenderId(mResult[1] == null ? null : (String) mResult[1]);
+			response.setClientName(mResult[2] == null ? null : (String) mResult[2]);
+			response.setCrossMarketInd(mResult[3] == null ? null : (String) mResult[3]);
+			String applType=mResult[4] == null ? null : (String) mResult[4];
+			String applSuType=mResult[5] == null ? null : (String) mResult[5];
+			response.setMerchApplType(applType+applSuType);
+			response.setTramsProcName(mResult[6] == null ? null : (String) mResult[6]);
+			response.setTramsJobName(mResult[7] == null ? null : (String) mResult[7]);
+			//response.setMasterconfiguration(masterConfiguration);
+			/*response.setsNALFAClientName(AlphaList.getSnClientName());
+			//response.setsNALFAClientSequence(AlphaList.getsNALFAClientSequence());
+			response.setsNALFACrossMarketInd(AlphaList.getSnCrossMarketInd());
+			response.setsNALFAMerchApplType(AlphaList.getSnMerchApplType()+AlphaList.getSnMerchApplSubType());
+			response.setsNALFASENDERID(AlphaList.getSnSenderId());
+			response.setsNALFATramsJobName(AlphaList.getSnTramsJobName());
+			response.setsNALFATramsProcName(AlphaList.getSnTramsProcName());*/
+			jsonResponse.add(response);
+		}
+		
+return jsonResponse;
+	}
+
+	@Override
+	public BatchConfigurationResponse getMasterConfiurationDetails(String senderId) {
+BatchConfigurationResponse jsonresponse=new BatchConfigurationResponse();
+		
+		MstrConfig daoResponse = (MstrConfig) isnssDbDao.getMasterConfiurationDetails(senderId);
+		return constructBrowseReponse(jsonresponse, daoResponse);
+	}
+	
+private BatchConfigurationResponse constructBrowseReponse(BatchConfigurationResponse jsonresponse,MstrConfig daoResponse) {
+		
+		//daoResponse=new MstrConfig();
+			BatchConfigurationResponse batchConfigurationResponse=new BatchConfigurationResponse();
+			batchConfigurationResponse.setCnfrmFileNm1(daoResponse.getCnfrmFileNm());
+			batchConfigurationResponse.setCnfrmFileNm2(daoResponse.getCnfrmFileNm2());
+			batchConfigurationResponse.setCnfrmFileTrnsmsnChk(daoResponse.getCnfrmFileTrnsmsnChk());
+			batchConfigurationResponse.setCnfrmGapFunctionId(daoResponse.getGapFuncId());
+			batchConfigurationResponse.setConfigId(daoResponse.getConfigId());
+			batchConfigurationResponse.setFileFormat(daoResponse.getFileFormat());
+			batchConfigurationResponse.setHoldProcessing(daoResponse.getHoldProcessing());
+			batchConfigurationResponse.setInputFileNm(daoResponse.getInputFileNm());
+			batchConfigurationResponse.setSenderId(daoResponse.getSenderId());
+			batchConfigurationResponse.setSeqGapFileNm(daoResponse.getSeqGapFileName());
+			batchConfigurationResponse.setSlsCdciFileNm(daoResponse.getSalesCdciFileName());
+			batchConfigurationResponse.setSlsCdciFileTxnChk(daoResponse.getSalesCdciTxnCheck());
+			batchConfigurationResponse.setSlsGecomFileNm(daoResponse.getGecomFilNm());
+			batchConfigurationResponse.setSlsGecomFileTxnChk(daoResponse.getSalesGecomTxnCheck());
+			batchConfigurationResponse.setSlsKobieFileNm(daoResponse.getSalesKobieFileName());
+			batchConfigurationResponse.setSlsKobieTxnChk(daoResponse.getSalesKobieTxnCheck());
+			batchConfigurationResponse.setSlsMfFileNm(daoResponse.getSalesMFFileName());
+			batchConfigurationResponse.setSlsMfJobTrgrNm(daoResponse.getSalesMFJobTriggerName());
+			batchConfigurationResponse.setSlsMfTxnChk(daoResponse.getSalesMFTxnCheck());
+			batchConfigurationResponse.setSlsSasGridFileNm(daoResponse.getSalesSasgridFileName());
+			batchConfigurationResponse.setSlsSasGridTxnChk(daoResponse.getSalesSasgridTxnCheck());
+			batchConfigurationResponse.setSpclProcessing(daoResponse.getSpclProcessing());
+			batchConfigurationResponse.setBatchType(daoResponse.getBatchType());
+			//batchConfigurationResponse.setMerchantProfileId(daoResponse.getM);
+			
+		return batchConfigurationResponse;
+	}
+
+@Override
+public BatchConfigurationResponse updateMstConfiguration(BatchConfigurationRequest batchConfigurationRequest) {
+	MstrConfig MstrConfig = new MstrConfig();
+	BatchConfigurationResponse jsonresponse = new BatchConfigurationResponse();
+	MstrConfig.setCnfrmFileNm(batchConfigurationRequest.getCnfrmFileNm1());
+	MstrConfig.setCnfrmFileNm2(batchConfigurationRequest.getCnfrmFileNm2());
+	MstrConfig.setCnfrmFileTrnsmsnChk(batchConfigurationRequest.getCnfrmFileTrnsmsnChk());
+	MstrConfig.setGapFuncId(batchConfigurationRequest.getCnfrmGapFunctionId());
+	MstrConfig.setConfigId(batchConfigurationRequest.getConfigId());
+	MstrConfig.setFileFormat(batchConfigurationRequest.getFileFormat());
+	MstrConfig.setHoldProcessing(batchConfigurationRequest.getHoldProcessing());
+	MstrConfig.setInputFileNm(batchConfigurationRequest.getInputFileNm());
+	MstrConfig.setSenderId(batchConfigurationRequest.getSenderId());
+	MstrConfig.setSeqGapFileName(batchConfigurationRequest.getSeqGapFileNm());
+	MstrConfig.setSalesCdciFileName(batchConfigurationRequest.getSlsCdciFileNm());
+	MstrConfig.setSalesCdciTxnCheck(batchConfigurationRequest.getSlsCdciFileTxnChk());
+	MstrConfig.setGecomFilNm(batchConfigurationRequest.getSlsGecomFileNm());
+	MstrConfig.setSalesGecomTxnCheck(batchConfigurationRequest.getSlsGecomFileTxnChk());
+	MstrConfig.setSalesKobieFileName(batchConfigurationRequest.getSlsKobieFileNm());
+	MstrConfig.setSalesKobieTxnCheck(batchConfigurationRequest.getSlsKobieTxnChk());
+	MstrConfig.setSalesMFFileName(batchConfigurationRequest.getSlsMfFileNm());
+	MstrConfig.setSalesMFJobTriggerName(batchConfigurationRequest.getSlsMfJobTrgrNm());
+	MstrConfig.setSalesMFTxnCheck(batchConfigurationRequest.getSlsMfTxnChk());
+	MstrConfig.setSalesSasgridFileName(batchConfigurationRequest.getSlsSasGridFileNm());
+	MstrConfig.setSalesSasgridTxnCheck(batchConfigurationRequest.getSlsSasGridTxnChk());
+	MstrConfig.setSpclProcessing(batchConfigurationRequest.getSpclProcessing());
+	MstrConfig.setBatchType(batchConfigurationRequest.getBatchType());
+	//MstrConfig.setMerchantProfileId(batchConfigurationRequest.getMerchantProfileId());
+
+	MstrConfig daoResponse = (MstrConfig) isnssDbDao.updateMstConfiguration(MstrConfig);
+	return constructBrowseReponse(jsonresponse, daoResponse);
+}
+
+@Override
+public BatchConfigurationResponse insertMstConfiguration(BatchConfigurationRequest batchConfigurationRequest) {
+	Boolean isAllowed=validateSenderIDForDuplicate(batchConfigurationRequest.getSenderId());
+	if(isAllowed.booleanValue())
+	{
+	MstrConfig MstrConfig = new MstrConfig();
+	BatchConfigurationResponse jsonresponse = new BatchConfigurationResponse();
+	MstrConfig.setCnfrmFileNm(batchConfigurationRequest.getCnfrmFileNm1());
+	MstrConfig.setCnfrmFileNm2(batchConfigurationRequest.getCnfrmFileNm2());
+	MstrConfig.setCnfrmFileTrnsmsnChk(batchConfigurationRequest.getCnfrmFileTrnsmsnChk());
+	MstrConfig.setGapFuncId(batchConfigurationRequest.getCnfrmGapFunctionId());
+	MstrConfig.setConfigId(batchConfigurationRequest.getConfigId());
+	MstrConfig.setFileFormat(batchConfigurationRequest.getFileFormat());
+	MstrConfig.setHoldProcessing(batchConfigurationRequest.getHoldProcessing());
+	MstrConfig.setInputFileNm(batchConfigurationRequest.getInputFileNm());
+	MstrConfig.setSenderId(batchConfigurationRequest.getSenderId());
+	MstrConfig.setSeqGapFileName(batchConfigurationRequest.getSeqGapFileNm());
+	MstrConfig.setSalesCdciFileName(batchConfigurationRequest.getSlsCdciFileNm());
+	MstrConfig.setSalesCdciTxnCheck(batchConfigurationRequest.getSlsCdciFileTxnChk());
+	MstrConfig.setGecomFilNm(batchConfigurationRequest.getSlsGecomFileNm());
+	MstrConfig.setSalesGecomTxnCheck(batchConfigurationRequest.getSlsGecomFileTxnChk());
+	MstrConfig.setSalesKobieFileName(batchConfigurationRequest.getSlsKobieFileNm());
+	MstrConfig.setSalesKobieTxnCheck(batchConfigurationRequest.getSlsKobieTxnChk());
+	MstrConfig.setSalesMFFileName(batchConfigurationRequest.getSlsMfFileNm());
+	MstrConfig.setSalesMFJobTriggerName(batchConfigurationRequest.getSlsMfJobTrgrNm());
+	MstrConfig.setSalesMFTxnCheck(batchConfigurationRequest.getSlsMfTxnChk());
+	MstrConfig.setSalesSasgridFileName(batchConfigurationRequest.getSlsSasGridFileNm());
+	MstrConfig.setSalesSasgridTxnCheck(batchConfigurationRequest.getSlsSasGridTxnChk());
+	MstrConfig.setSpclProcessing(batchConfigurationRequest.getSpclProcessing());
+	MstrConfig.setBatchType(batchConfigurationRequest.getBatchType());
+	MstrConfig daoResponse = (MstrConfig) isnssDbDao.insertMstConfiguration(MstrConfig);
+	return constructBrowseReponse(jsonresponse, daoResponse);
+}
+	else
+	{
+		BatchConfigurationResponse jsonresponse = new BatchConfigurationResponse();
+		jsonresponse.setAllowSenderID(false);
+		return jsonresponse;
+	}
+}
+
+@Override
+public Boolean validateSenderIDForDuplicate(String senderId) {
+	BatchConfigurationResponse jsonresponse=new BatchConfigurationResponse();
+	Boolean isAllowed = false;
+	isAllowed = isnssDbDao.validateSenderIDForDuplicate(senderId);
+	return isAllowed;
+
+}
+
+@Override
+public Boolean validateSenderIDForDuplicateForMerchantProfile(String senderId) {
+	
+	Boolean isAllowed = false;
+	isAllowed = isnssDbDao.validateSenderIDForDuplicateForMerchantProfile(senderId);
+	return isAllowed;
+}
+@Override
+public String updateBatchSequenceId(RequestVO objRequestVO) throws Exception{
+	String sequenceId=isnssDbDao.updateBatchSequenceId(objRequestVO);
+	return sequenceId;
+}
+}
+DAO:
+---
+package com...db.dao;
+
+import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com...db.constant.CommonConstant;
+import com...db.entity.TAuditInfo;
+import com...db.entity.TBatchDetailsRec;
+import com...db.entity.TBatchLog;
+import com...db.entity.TMerchantProfile;
+import com...db.entity.TMstrConfig;
+import com...db.model.MerchantLogBrowseRequest;
+import com...db.model.MerchantLogListRequest;
+import com...db.util.CommonUtil;
+import com...db.vo.RequestVO;
+
+@Transactional
+@Repository
+public class DbDAO implements IDbDao {
+
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	private static final Logger logger = Logger.getLogger(DbDAO.class);
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TMstrConfig> getMasterConfig() {
+		try {
+
+			Query query = entityManager.createQuery(" FROM TMstrConfig as atcl");
+			query.setParameter("inputFileNm", query);
+			// String hql = "FROM TMstrConfig as atcl";
+			List<TMstrConfig> lstobj = query.getResultList();
+			return lstobj;
+			// return (List<TMstrConfig>)
+			// entityManager.createQuery(query).getResultList();
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	public TMstrConfig getMstrConfig(String fileName) {
+		try {
+
+			Query query = entityManager.createQuery(" FROM TMstrConfig where inputFileNm=:filename");
+			query.setParameter("filename", fileName);
+			TMstrConfig tMstrConfig = (TMstrConfig) query.getSingleResult();
+			return tMstrConfig;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@Override
+	public TMstrConfig checkFileFormat(String filename) {
+
+		try {
+			Query query = entityManager.createQuery("FROM TMstrConfig WHERE  input_file_nm  LIKE :filename");
+			query.setParameter("filename", filename+"%");
+			
+			TMstrConfig tMstrConfig = (TMstrConfig) query.getSingleResult();
+			if (tMstrConfig.getFileFormat().equalsIgnoreCase("EBCIDIC")) {
+				return tMstrConfig;
+			} 
+			return tMstrConfig;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+
+		} finally {
+			entityManager.close();
+		}
+		return null;
+
+	}
+
+	// merchant profile table
+	@SuppressWarnings("unchecked")
+	@Override
+	public TMerchantProfile getSenderId(String snSenderId) {
+		try {
+
+			Query query = entityManager.createQuery("FROM TMerchantProfile ms where ms.snSenderId=:snSenderId");
+			query.setParameter("snSenderId", snSenderId);
+			// String hql = "FROM TMerchantProfile ms where ms.snSenderId='"
+			// + mid + "'";
+			TMerchantProfile obj = (TMerchantProfile) query.getSingleResult();
+			return obj;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public TMerchantProfile getAllProfile(String snSenderId) {
+		try {
+
+			Query query = entityManager.createQuery("FROM TMerchantProfile ms where ms.snSenderId=:snSenderId");
+			query.setParameter("snSenderId", snSenderId);
+			TMerchantProfile tMerchantProfile = (TMerchantProfile) query.getSingleResult();
+			// TMerchantProfile tMerchantProfile =(TMerchantProfile)
+			// entityManager.createQuery(hql).getSingleResult();
+			return tMerchantProfile;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@Override
+	public TMstrConfig updateMstConfig(TMstrConfig updatemstr) {
+		try {
+			logger.info("Updating the TMstrConfig Request details");
+			updatemstr = (TMstrConfig) entityManager.merge(updatemstr);
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return updatemstr;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public TMerchantProfile insertMerchantProfile(TMerchantProfile tMerchantProfile) {
+		try {
+			logger.info("Inserting the MerchantProfile Request details");
+			if (null != tMerchantProfile) {
+				tMerchantProfile = (TMerchantProfile) entityManager.merge(tMerchantProfile);
+				return tMerchantProfile;
+			}
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return tMerchantProfile;
+
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public TMstrConfig insertMstrConfig(TMstrConfig tMstrConfig) {
+		try {
+			logger.info("Inserting the MerchantProfile Request details");
+			if (null != tMstrConfig) {
+				tMstrConfig = (TMstrConfig) entityManager.merge(tMstrConfig);
+				return tMstrConfig;
+			}
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return tMstrConfig;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com..db.dao.IDbDao#insertTempFileData(com..db.entity.
+	 * TTempFileStore) This method is used to insert record file processing
+	 * details in t_temp_fileStore table
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public TAuditInfo insertAuditInfo(TAuditInfo tTempFlStr) {
+		try {
+			logger.info("Inserting the Audit Info details");
+			if (null != tTempFlStr) {
+				tTempFlStr = (TAuditInfo) entityManager.merge(tTempFlStr);
+				return tTempFlStr;
+			}
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return tTempFlStr;
+
+	}
+
+	@Override
+	public TBatchDetailsRec updateBatchDetail(TBatchDetailsRec updatemstr) {
+		try {
+			logger.info("Updating the TMstrConfig Request details");
+			if (null != updatemstr) {
+				updatemstr = (TBatchDetailsRec) entityManager.merge(updatemstr);
+				return updatemstr;
+			}
+			entityManager.flush();
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return updatemstr;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com..db.dao.IDbDao#updateTempFileData(com..db.entity.
+	 * TTempFileStore) DB call to update the records in
+	 * t_temp_file_store table
+	 */
+	@Override
+	public TAuditInfo updateAuditInfo(TAuditInfo tTempFlStr) {
+		try {
+			logger.info("Updating the TTempFileStore Request details");
+			if (null != tTempFlStr) {
+				TAuditInfo objAuditInfo=entityManager.find(TAuditInfo.class, tTempFlStr.getDatastoreId());
+				/*Setting the DB batchlog sequence id*/
+				if(tTempFlStr.getBatchLogSeqId()==0){
+					tTempFlStr.setBatchLogSeqId(objAuditInfo.getBatchLogSeqId());
+				}
+				Field[] tTempFlStrField = tTempFlStr.getClass().getDeclaredFields();
+				Field[] objAuditInfoField = objAuditInfo.getClass().getDeclaredFields();
+
+				for (int i = 0; i < tTempFlStrField.length; i++) {
+				 tTempFlStrField[i].setAccessible(true);
+				 objAuditInfoField[i].setAccessible(true);
+
+				 try {
+				  if (tTempFlStrField[i].get(tTempFlStr) != null && !tTempFlStrField[i].get(tTempFlStr).equals(objAuditInfoField[i].get(objAuditInfo))) {
+				   objAuditInfoField[i].set(objAuditInfo, tTempFlStrField[i].get(tTempFlStr));
+				  }
+				 } catch (IllegalArgumentException e) {
+					 logger.error("Exception::updateAuditInfo " + DbDAO.class, e);
+				 } catch (IllegalAccessException e) {
+					 logger.error("Exception::updateAuditInfo " + DbDAO.class, e);
+				 }
+
+				}
+
+				tTempFlStr = (TAuditInfo) entityManager.merge(objAuditInfo);
+				return tTempFlStr;
+			}
+			entityManager.flush();
+		} catch (Exception e) {
+			logger.error("Exception in ::updateTempFileData method::" + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return tTempFlStr;
+
+	}
+
+	@Override
+	public String checkFileName(String fileName) {
+
+		try {
+			Query query = entityManager.createQuery("FROM TMstrConfig WHERE  input_file_nm = :filename");
+			query.setParameter("filename", fileName);
+			// TMstrConfig tMstrConfig = (TMstrConfig)
+			// entityManager.createQuery(hql).getSingleResult();
+			TMstrConfig tMstrConfig = (TMstrConfig) query.getSingleResult();
+
+			return tMstrConfig.getSenderId();
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com..db.dao.IDbDao#delTempFileData(java.lang.String) Method
+	 * to delete the processed file details from temporary table
+	 */
+	@Override
+	public String delTempFileData(String fileName) {
+
+		String response = "Failure";
+		try {
+			Query query = entityManager.createQuery(" delete FROM TTempFileStore where filename=:inputFileNm");
+			query.setParameter("inputFileNm", fileName);
+			int result = query.executeUpdate();
+
+			if (result != 0) {
+				response = "SUCCESS";
+			}
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return response;
+
+	}
+
+	@Override
+	public List<TAuditInfo> getAuditInfoList(String batchName) {
+
+		try {
+			Query query = entityManager.createQuery("FROM TAuditInfo t where t.batchName = :batchname and t.processing <>'"+ "Y"+"'");
+			query.setParameter("batchname", batchName);
+		//	String query = " FROM TTempFileStore t where t.batchName='" + batchName + "'";
+			// query.setParameter("batchname", batchName);
+			// TMstrConfig tMstrConfig = (TMstrConfig)
+			// entityManager.createQuery(hql).getSingleResult();
+			List<TAuditInfo> tTempFlStr = (List<TAuditInfo>) query.getResultList();
+			return tTempFlStr;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+
+	}
+
+	// For BatchLog Table
+	@Override
+	public String postBatchLogs(TBatchLog tBatchLog) {
+
+		try {
+			logger.info("Inserting the BatchLog record details");
+			if (null != tBatchLog) {
+				entityManager.persist(tBatchLog);
+			}
+		} catch (Exception e) {
+			logger.error("Exception::Record Not Inserted " + DbDAO.class, e);
+		}
+		return "SUCCESS";
+	}
+
+	@Override
+	public List<TBatchLog> getAllLog(String snSenderId) {
+		try {
+
+			Query q = entityManager
+					.createNativeQuery(" Select * from t_batch_log ts where ts.SN_SENDER_ID=:snSenderId");
+			q.setParameter("snSenderId", snSenderId);
+			List<TBatchLog> tBatchLog = q.getResultList();
+			return tBatchLog;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public TBatchLog insertBatchLog(TBatchLog tBatchlog) {
+		try {
+			logger.info("Inserting the MerchantProfile Request details");
+			if (null != tBatchlog) {
+				tBatchlog = (TBatchLog) entityManager.merge(tBatchlog);
+				return tBatchlog;
+			}
+			entityManager.flush();
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return tBatchlog;
+
+	}
+
+	@Override
+	public List<TBatchLog> getDupCheckDetails(String snSenderId) throws Exception {
+		try {
+			// String hql= " From TBatchLog where snSenderId='" +snSenderId
+			// +"'and snRevDateTime BETWEEN DATE_SUB(NOW(),INTERVAL 30 DAY) AND
+			// NOW()";
+
+			Query q = entityManager.createNativeQuery(
+					"Select * from t_batch_log ts where ts.SN_SENDER_ID=:snSenderId and STR_TO_DATE(ts.SN_RECV_DATETIME , '%Y-%m-%d %T') > NOW() - INTERVAL 30 DAY");
+			q.setParameter("snSenderId", snSenderId);
+			List<TBatchLog> tBatchLog = q.getResultList();
+			// String hql = "FROM TBatchLog ms where ms.snSenderId='" +
+			// snSenderId + "'";
+			// List<TBatchLog> tBatchLog =
+			// entityManager.createQuery(hql).getResultList();
+			return tBatchLog;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@Override
+	public TMstrConfig getMerchantProfile(String fileName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+    @Override
+	public TMstrConfig getMstrCnfgDetails(String filename) {
+		try {
+			Query query = entityManager.createQuery("FROM TMstrConfig WHERE  input_file_nm = :filename");
+			query.setParameter("filename", filename);
+			TMstrConfig tMstrConfig = (TMstrConfig) query.getSingleResult();
+
+			return tMstrConfig;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+	}
+
+    @Override
+	public TMerchantProfile updateMerchantProfile(TMerchantProfile updatemerchant) {
+		try {
+			logger.info("Updating the TMstrConfig Request details");
+			updatemerchant = (TMerchantProfile) entityManager.merge(updatemerchant);
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return updatemerchant;
+	}
+	
+	/*Method to increment Gap Sequence Id and return the new sequence Id*/
+	@Override
+	public String updateGapSequenceId() {
+
+		String response = null;
+		try {
+			logger.info("Updating the SGap Sequence Number updateGapSequenceId()");
+			Query query = entityManager.createNativeQuery(
+					"Update gap_sequence_id set seq_id = LAST_INSERT_ID(seq_id) + 1");
+			int result = query.executeUpdate();
+
+			if (result != 0) {
+				query =entityManager.createNativeQuery("SELECT LAST_INSERT_ID()+1");
+				Object obj=query.getSingleResult();
+				response=obj.toString();
+			}
+		} catch (Exception e) {
+			logger.error("Exception::DbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return response;
+
+	}
+
+	@Override
+	public List<Object> getLogSearchDetails(MerchantLogListRequest merchantLogListRequest) {
+		
+		String recvStartDate = CommonUtil.formatDate(merchantLogListRequest.getStartDateTime());
+		String recvEndDate = CommonUtil.formatDate(merchantLogListRequest.getEndDateTime());
+		   
+
+		StringBuilder query=new StringBuilder();
+		query.append("Select ts.SN_RECV_APPLICATION_ID,ts.SN_RECV_DATETIME,ts.SN_RECV_STATUS,ts.SN_RECV_JOB_NAME,ts.SN_RECV_RECORD_COUNT,ts.SN_RECV_SALES_COUNT,"
+				+ "ts.SN_RECV_RETURNS_COUNT,ts.SN_RECV_SALES_AMOUNT,ts.SN_RECV_RETURNS_AMOUNT,ts.SN_RECV_NET_AMOUNT,ts.SN_LOG_COMMENTS,ts.SN_SENDER_ID from t_batch_log ts where STR_TO_DATE(ts.SN_RECV_DATETIME , '%Y-%m-%d %T') > STR_TO_DATE('"+recvStartDate+"','%Y-%m-%d %T') and STR_TO_DATE(ts.SN_RECV_DATETIME , '%Y-%m-%d %T') < STR_TO_DATE('"+recvEndDate+"','%Y-%m-%d %T')");
+		// query.append("From TBatchLog log  where log.snRevDateTime between '" +recvStartDate+ "' and '" +recvEndDate+ "' ");
+		if(merchantLogListRequest.getApplicationId().equalsIgnoreCase(CommonConstant.POS)||merchantLogListRequest.getApplicationId().equalsIgnoreCase(CommonConstant.POSCCB) ||merchantLogListRequest.getApplicationId().equalsIgnoreCase(CommonConstant.PAY))
+		{
+		query.append(" and SN_RECV_APPLICATION_ID = '" +merchantLogListRequest.getApplicationId()+ "'");
+		}
+		else
+		{
+		query.append(" and SN_SENDER_ID = '" +merchantLogListRequest.getApplicationId()+ "'");
+		}
+		Query query1 = entityManager.createNativeQuery(query.toString()); 
+		List<Object> tBatchLog =  query1.getResultList();
+		return tBatchLog;
+		}
+
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Object> getLogDetails(MerchantLogBrowseRequest merchantLogBrowseRequest) throws ParseException   {
+		String recevingApplicaiton=merchantLogBrowseRequest.getRecevingApplicaiton();
+		String dateStr = merchantLogBrowseRequest.getDateTime();
+		    DateFormat readFormat = new SimpleDateFormat(CommonConstant.listDateFormat);
+		    DateFormat writeFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
+		    Date date = null;
+		    try {
+		       date = readFormat.parse( dateStr );
+		    } catch ( ParseException e ) {
+		        e.printStackTrace();
+		    }
+		    String formattedDate = "";
+		    if( date != null ) {
+		    formattedDate = writeFormat.format( date );
+		    }
+		String jobName=merchantLogBrowseRequest.getJobName();
+		String status=merchantLogBrowseRequest.getStatus();
+		
+		try {
+			Query q = entityManager.createNativeQuery(
+					"select ts.SN_RECV_RECORD_COUNT,ts.SN_RECV_RETURNS_COUNT,ts.SN_RECV_SALES_AMOUNT,ts.SN_RECV_SALES_COUNT,ts.SN_RECV_RETURNS_AMOUNT,ts.SN_RECV_NET_AMOUNT,ts.SN_RECV_STATUS,ts.SN_SEND_DATETIME,ts.SN_SEND_RECORD_COUNT,"
+					+ "ts.SN_SEND_SALES_AMOUNT,ts.SN_SEND_SALES_COUNT,ts.SN_SEND_RETURNS_AMOUNT,ts.SN_SEND_RETURNS_COUNT,ts.SN_SEND_NET_AMOUNT,ts.SN_OVERRIDE_DUP_IND,ts.SN_OVERRIDE_USER_ID,ts.SN_OVERRIDE_DATETIME,"
+					+ "ts.SN_LOG_COMMENTS,mf.SN_CROSS_MARKET_IND,mf.SN_MERCH_APPL_TYPE,mf.SN_MERCH_APPL_SUB_TYPE,ts.SN_RECV_DATETIME,ts.SN_SENDER_ID,"
+					+ "ts.SN_RECV_JOB_NAME,ai.datastore_id,ts.SN_SEND_FILE_ID,ts.SN_RECV_APPLICATION_ID,mf.SN_CLIENT_NAME,ai.input_file_nm from  "
+					+ "t_merchant_profile mf inner join t_batch_log ts ON ts.sn_sender_id=mf.sn_sender_id "
+					+ "left outer join t_audit_info ai ON ai.batch_log_seq_id=ts._BATCHLOG_ID "
+					+ "where  "
+					+ "ts.SN_RECV_APPLICATION_ID=:recevingApplicaiton and ts.SN_RECV_DATETIME=:formattedDate and ts.SN_RECV_JOB_NAME=:jobName and ts.SN_RECV_STATUS=:status");
+			
+			q.setParameter("recevingApplicaiton", recevingApplicaiton);
+			q.setParameter("formattedDate", formattedDate);
+			q.setParameter("jobName", jobName);
+			q.setParameter("status", status);
+			List<Object> obj = q.getResultList();
+			return obj;
+		}catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		
+		
+	}
+
+	@Override
+	public List<Object> updateMerchantLogDetail(MerchantLogBrowseRequest merchantLogBrowseRequest) {
+		TBatchLog tBatchLog=new TBatchLog();
+		List<Object> obj=new ArrayList<Object>();
+		String dateStr = merchantLogBrowseRequest.getDateTime();
+		    DateFormat readFormat = new SimpleDateFormat(CommonConstant.listDateFormat);
+		    DateFormat writeFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
+		    Date date = null;
+		    try {
+		       date = readFormat.parse( dateStr );
+		    } catch ( ParseException e ) {
+		        e.printStackTrace();
+		    }
+		    String formattedDate = "";
+		    if( date != null ) {
+		    formattedDate = writeFormat.format( date );
+		    }
+		try {
+			Query q = entityManager.createNativeQuery(" update t_batch_log ts set ts.SN_OVERRIDE_DUP_IND=:overrideDuplicate,ts.SN_OVERRIDE_DATETIME=:overrideDateTime where  ts.SN_RECV_APPLICATION_ID=:recevingApplicaiton and ts.SN_RECV_DATETIME=:formattedDate and ts.SN_RECV_JOB_NAME=:jobName and ts.SN_RECV_STATUS=:status");
+			q.setParameter("recevingApplicaiton", merchantLogBrowseRequest.getRecevingApplicaiton());
+			q.setParameter("formattedDate", formattedDate);
+			q.setParameter("jobName", merchantLogBrowseRequest.getJobName());
+			q.setParameter("status", merchantLogBrowseRequest.getStatus());
+			q.setParameter("overrideDuplicate", merchantLogBrowseRequest.getOverrideDupicate());
+			//q.setParameter("userId",merchantLogBrowseRequest.getUserId());
+			q.setParameter("overrideDateTime", merchantLogBrowseRequest.getOverride_dateTime());
+			
+			int result = q.executeUpdate();
+
+			if (result != 0) {
+				obj= getLogDetails(merchantLogBrowseRequest);
+			}
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return obj;
+	}
+
+	@Override
+	public List<Object> getAlphaDetails(String sNALFACrossMarketInd) {
+		try {
+			//Query query = entityManager.createQuery("FROM TMerchantProfile al "); //where al.sNALFACrossMarketInd=:sNALFACrossMarketInd");
+			Query query = entityManager.createNativeQuery("select mc.input_file_nm,ts.SN_SENDER_ID,ts.SN_CLIENT_NAME,ts.SN_CROSS_MARKET_IND,ts.SN_MERCH_APPL_TYPE,ts.SN_MERCH_APPL_SUB_TYPE,ts.SN_TRAMS_PROC_NAME,ts.SN_TRAMS_JOB_NAME from t_merchant_profile ts LEFT OUTER JOIN t_mstr_config mc ON ts.SN_SENDER_ID=mc.sender_id");
+			//query.setParameter("sNALFACrossMarketInd", sNALFACrossMarketInd);
+			// query.setParameter("batchname", batchName);
+			// TMstrConfig tMstrConfig = (TMstrConfig)
+			// entityManager.createQuery(hql).getSingleResult();
+			//List<TMerchantProfile> tAlphaList1 = (List<TMerchantProfile>) query.getResultList();
+			//return tAlphaList1;
+			List<Object> obj = query.getResultList();
+			return obj;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@Override
+	public TMstrConfig getMasterConfiurationDetails(String senderId) {
+		try {
+
+			Query query = entityManager.createQuery(" FROM TMstrConfig where senderId=:senderId");
+			query.setParameter("senderId", senderId);
+			TMstrConfig tMstrConfig = (TMstrConfig) query.getSingleResult();
+			return tMstrConfig;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	@Override
+	public TMstrConfig updateMstConfiguration(TMstrConfig tMstrConfig) {
+		
+		try {
+			logger.info("Updating the TMstrConfig Request details");
+			tMstrConfig = (TMstrConfig) entityManager.merge(tMstrConfig);
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return tMstrConfig;
+	}
+
+	@Override
+	public TMstrConfig insertMstConfiguration(TMstrConfig tMstrConfig) {
+		try {
+			logger.info("Inserting the MerchantProfile Request details");
+			if (null != tMstrConfig) {
+				tMstrConfig = (TMstrConfig) entityManager.merge(tMstrConfig);
+				return tMstrConfig;
+			}
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+		return tMstrConfig;
+	}
+	@Override
+	public Boolean validateSenderIDForDuplicate(String senderId) {
+		try {
+
+			Query query = entityManager.createQuery("SELECT count(*) FROM TMstrConfig where senderId=:senderId");
+			query.setParameter("senderId", senderId);
+			Long senderCount = (Long) query.getSingleResult();
+			Boolean isAllowed = senderCount > 0 ?  false : true;
+			return isAllowed;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+	}
+
+	
+	@Override
+	public Boolean validateSenderIDForDuplicateForMerchantProfile(String senderId) {
+		try {
+
+			Long senderCount = (Long) entityManager.createQuery("SELECT COUNT(t.snSenderId) FROM TMerchantProfile t where t.snSenderId =:senderId").setParameter("senderId", senderId).getSingleResult();
+			//Long senderCount = (Long) query.getResultList();
+			Boolean isAllowed = senderCount > 0 ?  false : true;
+			return isAllowed;
+		} catch (Exception e) {
+			logger.error("Exception::IDbService " + DbDAO.class, e);
+			return null;
+		} finally {
+			entityManager.close();
+		}
+	}
+	
+	
+@Override
+public String updateBatchSequenceId(RequestVO objRequestVO ) throws Exception {
+	String response = null;
+	try {
+		
+		logger.info("Updating the SGap Sequence Number updateGapSequenceId()");
+		Query query = entityManager.createNativeQuery(
+				"Update t_batch_sequence_id set sequence_id = LAST_INSERT_ID(sequence_id) + 1 where sender_id=:senderId");
+		query.setParameter("senderId", objRequestVO.getSenderId());
+		int result = query.executeUpdate();
+
+		if (result != 0) {
+			query =entityManager.createNativeQuery("SELECT LAST_INSERT_ID()+1");
+			Object obj=query.getSingleResult();
+			response=obj.toString();
+		}
+	} catch (Exception e) {
+		logger.error("Exception::DbService " + DbDAO.class, e);
+		return null;
+	} finally {
+		entityManager.close();
+	}
+	return response;
+	
+}
+COntroller:
+----------
+package com..db.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com..db.entity.TBatchDetailsRec;
+import com..db.entity.TBatchLog;
+import com..db.entity.TMerchantProfile;
+import com..db.entity.TMstrConfig;
+import com..db.model.AlphaListRequest;
+import com..db.model.AlphaListResponse;
+import com..db.model.BatchConfigurationRequest;
+import com..db.model.BatchConfigurationResponse;
+import com..db.model.MerchantLogBrowseRequest;
+import com..db.model.MerchantLogBrowseResponse;
+import com..db.model.MerchantLogListRequest;
+import com..db.model.MerchantLogListResponse;
+import com..db.entity.TAuditInfo;
+import com..db.service.IDbService;
+import com..db.vo.RequestVO;
+
+@RestController
+@RequestMapping(value = "")
+public class DbController {
+	@Autowired
+	private IDbService iDbService;
+
+	@RequestMapping(value = "checkFileFomat", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<String> checkFileFormat(@RequestBody RequestVO objRequestVO) throws Exception {
+		TMstrConfig search = iDbService.checkFileFormat(objRequestVO.getFilename());
+		String response = "";
+		if (null != search && search.getFileFormat().equals("EBCIDIC")) {
+			response = "success";
+		} else {
+			response = "FAILURE";
+		}
+
+		return (new ResponseEntity<String>(response, HttpStatus.OK));
+	}
+
+	/*
+	 * If same file loaded with in 30 days found then please go for Duplicate
+	 * override check
+	 */
+
+	// Code to get Sender id based on file name.
+	@RequestMapping(value = "checkFileName", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<String> checkFileName(@RequestBody RequestVO objRequestVO) throws Exception {
+		String response = iDbService.checkFileName(objRequestVO.getFilename());
+		return (new ResponseEntity<String>(response, HttpStatus.OK));
+	}
+
+	/*
+	 * Code for deleting the processed file details in temporary table.
+	 */
+	@RequestMapping(value = "/deleteTempDatastore", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<String> delTempDatastore(@RequestParam(name = "fileName") String fileName)
+			throws Exception {
+		String response = iDbService.delTempFileData(fileName);
+		if (null != response && !response.equalsIgnoreCase("FAILURE")) {
+			response = "SUCCESS";
+		}
+
+		return (new ResponseEntity<String>(response, HttpStatus.CREATED));
+	}
+
+	// code to fetch Masterconfig data with filename as input
+	@RequestMapping(value = "fetchMstrCnfg", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<TMstrConfig> fetchMstrCnfgDtls(@RequestBody RequestVO objRequestVO)
+			throws Exception {
+		TMstrConfig response = iDbService.fetchMstrCnfgDetails(objRequestVO.getFilename());
+		return (new ResponseEntity<TMstrConfig>(response, HttpStatus.OK));
+	}
+
+	// code to find the configId from masterconfig table
+
+	// code for All records for BatchLog
+	@RequestMapping(value = "getBatchLogDetails", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<List<TBatchLog>> getAllLog(@RequestBody RequestVO objRequestVO)
+			throws Exception {
+		List<TBatchLog> list = iDbService.getAllLog(objRequestVO.getSenderId());
+		return new ResponseEntity<List<TBatchLog>>(list, HttpStatus.OK);
+	}
+
+	// code for All records for merchantProfile
+	@RequestMapping(value = "merchantProfile", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<TMerchantProfile> getAllProfile(@RequestBody RequestVO objRequestVO)
+			throws Exception {
+		TMerchantProfile list = iDbService.getAllProfile(objRequestVO.getSenderId());
+		return new ResponseEntity<TMerchantProfile>(list, HttpStatus.OK);
+	}
+	// code for All records for Alpha list table
+	@RequestMapping(value = "getAlphaDetails", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<List<AlphaListResponse>> getAlphaDetails(
+			@RequestBody AlphaListRequest alphaListRequest) throws Exception {
+		String sNALFACrossMarketInd = alphaListRequest.getsNALFACrossMarketInd();
+
+		List<AlphaListResponse> list = iDbService.getAlphaDetails(sNALFACrossMarketInd);
+		return new ResponseEntity<List<AlphaListResponse>>(list, HttpStatus.OK);
+	}
+
+	/*
+	 *
+	 * Code for fetching the processed file details in temporary table.
+	 */
+	@RequestMapping(value = "selectTempDatastore", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<List<TAuditInfo>> getAuditInfoList(
+			@RequestBody TAuditInfo tTempFlStr) throws Exception {
+		List<TAuditInfo> tTempFlStrLst = iDbService.getAuditInfoList(tTempFlStr.getBatchName());
+		return new ResponseEntity<List<TAuditInfo>>(tTempFlStrLst, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "batchLog", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<List<TBatchLog>> getDupCheckDetails(@RequestBody RequestVO objRequestVO)
+			throws Exception {
+		List<TBatchLog> tBatchLog = iDbService.getDupCheckDetails(objRequestVO.getSenderId());
+		return new ResponseEntity<List<TBatchLog>>(tBatchLog, HttpStatus.OK);
+	}
+
+	//code for get log details based on application id
+	@RequestMapping(value = "getBatchLogBrowseDetails", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<MerchantLogBrowseResponse> getLogDetails(
+			@RequestBody MerchantLogBrowseRequest merchantLogBrowseRequest) throws Exception {
+
+		MerchantLogBrowseResponse list = iDbService.getLogDetails(merchantLogBrowseRequest);
+		return new ResponseEntity<MerchantLogBrowseResponse>(list, HttpStatus.OK);
+	}
+	//code for get log details based on recv application id and job name and status 
+	@RequestMapping(value = "getBatchLogSearchDetails", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<List<MerchantLogListResponse>> getLogSearchDetails(
+			@RequestBody MerchantLogListRequest merchantLogListRequest) throws Exception {
+
+		List<MerchantLogListResponse> list = iDbService.getLogSearchDetails(merchantLogListRequest);
+		return new ResponseEntity<List<MerchantLogListResponse>>(list, HttpStatus.OK);
+	}
+    //code for get masterconfiguration details
+	@RequestMapping(value = "getMstrConfiguration", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<BatchConfigurationResponse> getMasterConfiurationDetails(
+			@RequestBody BatchConfigurationRequest batchConfigurationRequest) throws Exception {
+		BatchConfigurationResponse list = iDbService
+				.getMasterConfiurationDetails(batchConfigurationRequest.getSenderId());
+		return new ResponseEntity<BatchConfigurationResponse>(list, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "mstrconfig", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<TMstrConfig> getMstrConfig(@RequestBody RequestVO objRequestVO)
+			throws Exception {
+		TMstrConfig search = iDbService.getMstrConfig(objRequestVO.getFilename());
+		return new ResponseEntity<TMstrConfig>(search, HttpStatus.OK);
+	}
+
+	// code to find sender id from t_merchant_profile table
+	@RequestMapping(value = "sender", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<TMerchantProfile> getSenderId(@RequestBody RequestVO objRequestVO)
+			throws Exception {
+		TMerchantProfile tMerchantProfile = iDbService.getSenderId(objRequestVO.getSenderId());
+		return new ResponseEntity<TMerchantProfile>(tMerchantProfile, HttpStatus.OK);
+	}
+
+	/*
+	 * Code for inserting filename detail in temporary table
+	 */
+	@RequestMapping(value = "insertTempDatastore", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<String> insertAuditInfo(@RequestBody TAuditInfo tTempFlStr)
+			throws Exception {
+		tTempFlStr = iDbService.insertAuditInfo(tTempFlStr);
+		String response = "FAILURE";
+		if (null != tTempFlStr) {
+			response = "SUCCESS";
+		}
+
+		return (new ResponseEntity<String>(response, HttpStatus.CREATED));
+	}
+
+	// code to insert values TBatchLog(t_batch_log) table
+	@RequestMapping(value = "insertbatchlogs", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<String> insertBatchLog(@RequestBody TBatchLog tBatchlog)
+			throws Exception {
+		TBatchLog tBatchlogs = iDbService.insertBatchLog(tBatchlog);
+		String response = "FAILURE";
+		if (null != tBatchlogs) {
+			response = String.valueOf(tBatchlogs.getSnBatchLogPriKey());
+		}
+
+		return (new ResponseEntity<String>(response, HttpStatus.CREATED));
+	}
+
+	@RequestMapping(value = "insertBatchDetailRec", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<String> insertBatchRcrd(@RequestBody TBatchDetailsRec tBatchDetailsRec)
+			throws Exception {
+		tBatchDetailsRec = iDbService.insertBatchRcrd(tBatchDetailsRec);
+		String response = "SUCCESS";
+		return (new ResponseEntity<String>(response, HttpStatus.CREATED));
+	}
+
+	// code to insert values TMerchantProfile(t_merchant_profile) table
+	@RequestMapping(value = "insertRecodrs", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<String> insertMerchntProfile(
+			@RequestBody TMerchantProfile tMerchantProfile) throws Exception {
+		tMerchantProfile = iDbService.insertMerchantProfile(tMerchantProfile);
+		String response = "FAILURE";
+		if (null != tMerchantProfile) {
+			response = "SUCCESS";
+		}
+
+		return (new ResponseEntity<String>(response, HttpStatus.CREATED));
+	}
+    //code for insert master configuration details
+	@RequestMapping(value = "insertMstrConfiguration", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<BatchConfigurationResponse> insertMstConfiguration(
+			@RequestBody BatchConfigurationRequest batchConfigurationRequest) throws Exception {
+		BatchConfigurationResponse batchConfigurationResponse = iDbService
+				.insertMstConfiguration(batchConfigurationRequest);
+		return new ResponseEntity<BatchConfigurationResponse>(batchConfigurationResponse, HttpStatus.OK);
+	}
+
+	// code to insert values TMerchantProfile(t_merchant_profile) table
+	@RequestMapping(value = "insertMstrConfig", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<String> insertMstrConfig(@RequestBody TMstrConfig tMstrConfig)
+			throws Exception {
+		tMstrConfig = iDbService.insertMstrConfig(tMstrConfig);
+		String response = "FAILURE";
+		if (null != tMstrConfig) {
+			response = "SUCCESS";
+		}
+
+		return (new ResponseEntity<String>(response, HttpStatus.CREATED));
+	}
+
+	/*
+	 * Code for updating the processing details in temporary table.
+	 */
+	@RequestMapping(value = "updateTempDatastore", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<TAuditInfo> updateAuditInfo(@RequestBody TAuditInfo tTempFlStr)
+			throws Exception {
+		iDbService.updateAuditInfo(tTempFlStr);
+		return (new ResponseEntity<TAuditInfo>(tTempFlStr, HttpStatus.OK));
+
+	}
+
+	// code to update values in TBatchDetailsRec(T_BATCH_FILE_REC) table
+	@RequestMapping(value = "updateBatchDetailRec", method = RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody ResponseEntity<TBatchDetailsRec> updateBatchDetail(
+			@RequestBody TBatchDetailsRec updatemstr) throws Exception {
+		iDbService.updateBatchDetail(updatemstr);
+		return new ResponseEntity<TBatchDetailsRec>(updatemstr, HttpStatus.OK);
+
+	}
+
+	// code to update values in masterconfig table
+	@RequestMapping(value = "updateGapSeqId", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<String> updateGapSequenceId(@RequestBody RequestVO objRequestVO)
+			throws Exception {
+		String sequenceId = iDbService.updateGapSequenceId();
+		return new ResponseEntity<String>(sequenceId, HttpStatus.OK);
+
+	}
+   //code for update merchant log table
+	@RequestMapping(value = "updateBatchLogDetails", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<MerchantLogBrowseResponse> updateMerchantLogDetail(
+			@RequestBody MerchantLogBrowseRequest merchantLogBrowseRequest) throws Exception {
+		MerchantLogBrowseResponse merchantLogBrowseResponse = iDbService
+				.updateMerchantLogDetail(merchantLogBrowseRequest);
+		return new ResponseEntity<MerchantLogBrowseResponse>(merchantLogBrowseResponse, HttpStatus.OK);
+
+	}
+
+	// code to update values in masterconfig table
+	@RequestMapping(value = "updateMerchantProfile", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<TMerchantProfile> updateMerchantProfile(
+			@RequestBody TMerchantProfile updatemerchant) throws Exception {
+		iDbService.updateMerchantProfile(updatemerchant);
+		return new ResponseEntity<TMerchantProfile>(updatemerchant, HttpStatus.OK);
+
+	}
+
+	// code to update values in masterconfig table
+	@RequestMapping(value = "updateMstrConfig", method = RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody ResponseEntity<TMstrConfig> updateMstConfig(@RequestBody TMstrConfig updatemstr)
+			throws Exception {
+		iDbService.updateMstConfig(updatemstr);
+		return new ResponseEntity<TMstrConfig>(updatemstr, HttpStatus.OK);
+
+	}
+
+	// code to update values in Master configuration table
+	@RequestMapping(value = "updateMstrConfiguration", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<BatchConfigurationResponse> updateMstConfiguration(
+			@RequestBody BatchConfigurationRequest batchConfigurationRequest) throws Exception {
+		BatchConfigurationResponse batchConfigurationResponse = iDbService
+				.updateMstConfiguration(batchConfigurationRequest);
+		return new ResponseEntity<BatchConfigurationResponse>(batchConfigurationResponse, HttpStatus.OK);
+	}
+	// code to update values in Batch Sequence table
+				@RequestMapping(value = "updateBatchSeqId", method = RequestMethod.POST, consumes = "application/json")
+				public @ResponseBody ResponseEntity<String> updateBatchSequenceId(@RequestBody RequestVO objRequestVO)
+						throws Exception {
+					String sequenceId = iDbService.updateBatchSequenceId(objRequestVO);
+					return new ResponseEntity<String>(sequenceId, HttpStatus.OK);
+
+				}
+}
